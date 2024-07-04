@@ -1,0 +1,34 @@
+.slide-container {
+    width: 100%;
+    padding: 40px 0 0 0;
+}
+
+.each-slide-effect {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.each-slide-effect div {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.each-slide-effect span {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 5px;
+}
