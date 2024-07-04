@@ -6,7 +6,7 @@ const ClientLayout = () => {
     return (
         <div>
             <Header />
-            <Container maxWidth="xl">
+            <Container maxWidth="xl" sx={{ marginTop: "75px" }}>
                 <Outlet />
             </Container>
         </div>
