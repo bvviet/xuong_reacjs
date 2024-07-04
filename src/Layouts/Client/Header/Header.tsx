@@ -14,13 +14,16 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
+import { Link } from "react-router-dom";
+import { Stack } from "@mui/material";
+
 const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const StyledAppBar = styled(AppBar)({
     color: "#000",
     width: "100%",
     backgroundColor: "#FFF9E5",
+    boxShadow: "none",
 });
 
 function Header() {
@@ -43,10 +46,20 @@ function Header() {
         setAnchorElUser(null);
     };
 
+    const CustomButton = styled(Button)(() => ({
+        fontSize: "1.4rem",
+        color: "#191B1D",
+        "&.MuiButton-contained": {
+            background: "#FF5B26",
+            borderRadius: "60px",
+        },
+    }));
+
     return (
         <StyledAppBar position="static">
             <Container maxWidth="xl">
-                <Toolbar disableGutters>
+                <Toolbar disableGutters sx={{}}>
+                    {/* Logo */}
                     <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
                     <Typography
                         variant="h6"
@@ -56,16 +69,15 @@ function Header() {
                         sx={{
                             mr: 2,
                             display: { xs: "none", md: "flex" },
-                            fontFamily: "monospace",
                             fontWeight: 700,
                             letterSpacing: ".3rem",
                             color: "inherit",
                             textDecoration: "none",
+                            fontSize: "2.4rem",
                         }}
                     >
-                        LOGO
+                        Double V
                     </Typography>
-
                     <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                         <IconButton
                             size="large"
@@ -102,11 +114,10 @@ function Header() {
                             ))}
                         </Menu>
                     </Box>
-
                     <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
                     <Typography
                         variant="h5"
-                        noWrap
+                        noWrap  
                         component="a"
                         href="#app-bar-with-responsive-menu"
                         sx={{
@@ -122,21 +133,21 @@ function Header() {
                     >
                         LOGO
                     </Typography>
-
-                    <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                    {/* Menu */}
+                    <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, marginLeft: "200px" }}>
                         {pages.map((page) => (
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: "#000", display: "block" }}
+                                sx={{ my: 2, color: "#000", display: "block", fontSize: "1.6rem", margin: "0 20px" }}
                             >
                                 {page}
                             </Button>
                         ))}
                     </Box>
-
+                    {/* Avatar */}
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
+                        <Tooltip sx={{ fontSize: "1.6rem" }} title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                             </IconButton>
@@ -157,13 +168,34 @@ function Header() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
+                            <MenuItem onClick={handleCloseUserMenu}>
+                                <Typography
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "flex-start",
+                                        fontSize: "1.6rem",
+                                        gap: "10px",
+                                    }}
+                                    textAlign="center"
+                                >
+                                    <Link to={"/profile"}>Profile</Link>
+                                    <Link to={"/account"}>Account</Link>
+                                    <Link to={"/dashboard"}>Dashboard</Link>
+                                    <Link to={"/logout"}>Logout</Link>
+                                </Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
+                    {/* Đăng ký đăng nhập */}
+                    <Stack spacing={2} direction="row">
+                        <CustomButton variant="text" size="large">
+                            Đăng nhập
+                        </CustomButton>
+                        <CustomButton variant="contained" size="large">
+                            Đăng ký
+                        </CustomButton>
+                    </Stack>
                 </Toolbar>
             </Container>
         </StyledAppBar>
