@@ -1,13 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header/Header";
+import { Container } from "@mui/material";
 
 const ClientLayout = () => {
     return (
         <div>
             <Header />
-            <main>
+            <Container maxWidth="xl">
                 <Outlet />
-            </main>
+            </Container>
         </div>
     );
 };
