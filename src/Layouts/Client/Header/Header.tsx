@@ -60,7 +60,6 @@ function Header() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{}}>
                     {/* Logo */}
-                    <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -117,7 +116,7 @@ function Header() {
                     <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
                     <Typography
                         variant="h5"
-                        noWrap  
+                        noWrap
                         component="a"
                         href="#app-bar-with-responsive-menu"
                         sx={{
