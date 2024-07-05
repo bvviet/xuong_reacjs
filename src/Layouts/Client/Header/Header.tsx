@@ -145,11 +145,11 @@ function Header() {
                         <CustomButton variant="text" size="large">
                             Đăng nhập
                         </CustomButton>
-                        <Register open={open} onClose={handleClose} />
 
                         <CustomButton onClick={handleOpen} variant="contained" size="large">
                             Đăng ký
                         </CustomButton>
+                        <Register open={open} onClose={handleClose} />
                     </Stack>
                 </Toolbar>
             </Container>
