@@ -16,6 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import { Stack } from "@mui/material";
 import Search from "../../../components/client/Search/Search";
+import Register from "../../../pages/Client/Register";
 
 const pages = ["Products", "Pricing", "Blog"];
 
@@ -28,6 +29,10 @@ const StyledAppBar = styled(AppBar)({
 });
 
 function Header() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -140,7 +145,9 @@ function Header() {
                         <CustomButton variant="text" size="large">
                             Đăng nhập
                         </CustomButton>
-                        <CustomButton variant="contained" size="large">
+                        <Register open={open} onClose={handleClose} />
+
+                        <CustomButton onClick={handleOpen} variant="contained" size="large">
                             Đăng ký
                         </CustomButton>
                     </Stack>
