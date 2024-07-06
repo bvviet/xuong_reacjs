@@ -10,10 +10,16 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
 function Sidebar() {
+  const menuItems = [
+    { text: "List Product", path: "/admin/list" },
+    { text: "Add Product", path: "/admin/add" },
+  ];
+
   return (
     <Drawer
       sx={{
@@ -30,13 +36,13 @@ function Sidebar() {
       <Toolbar />
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {menuItems.map((text, index) => (
+          <ListItem key={text.text} disablePadding>
+            <ListItemButton component={NavLink} to={text.path}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text.text} />
             </ListItemButton>
           </ListItem>
         ))}
