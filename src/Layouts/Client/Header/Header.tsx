@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { Stack } from "@mui/material";
 import Search from "../../../components/client/Search/Search";
 import Register from "../../../pages/Client/Register";
+import Login from "../../../pages/Client/Login";
 
 const pages = ["Products", "Pricing", "Blog"];
 
@@ -29,9 +30,13 @@ const StyledAppBar = styled(AppBar)({
 });
 
 function Header() {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [openRegister, setOpenRegister] = React.useState(false);
+    const [openLogin, setOpenLogin] = React.useState(false);
+
+    const handleOpenRegister = () => setOpenRegister(true);
+    const handleCloseRegister = () => setOpenRegister(false);
+    const handleOpenLogin = () => setOpenLogin(true);
+    const handleCloseLogin = () => setOpenLogin(false);
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -142,14 +147,23 @@ function Header() {
                     </Box>
                     {/* Đăng ký đăng nhập */}
                     <Stack spacing={2} direction="row">
-                        <CustomButton variant="text" size="large">
+                        <CustomButton onClick={handleOpenLogin} variant="text" size="large">
                             Đăng nhập
                         </CustomButton>
+                        <Login
+                            handleOpenLogin={openLogin}
+                            onCloseLogin={handleCloseLogin}
+                            onSwitchToRegister={handleOpenRegister}
+                        />
 
-                        <CustomButton onClick={handleOpen} variant="contained" size="large">
+                        <CustomButton onClick={handleOpenRegister} variant="contained" size="large">
                             Đăng ký
                         </CustomButton>
-                        <Register open={open} onClose={handleClose} />
+                        <Register
+                            handleOpenRegister={openRegister}
+                            onCloseRegister={handleCloseRegister}
+                            onSwitchToLogin={handleOpenLogin}
+                        />
                     </Stack>
                 </Toolbar>
             </Container>
