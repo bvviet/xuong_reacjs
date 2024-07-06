@@ -24,6 +24,9 @@ function AdminProductList() {
   const [confirm, setConfirm] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [idDelete, setIdDelete] = useState<string | null>(null);
+  const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
   const getAllProduct = async () => {
     try {
@@ -46,9 +49,12 @@ function AdminProductList() {
   const handleDelete = async () => {
     try {
       await axios.delete("/products/" + idDelete);
+      setFlashSeverity("success");
       setShowFlash(true);
       getAllProduct();
     } catch (error) {
+      setFlashSeverity("error");
+      setShowFlash(true);
       console.log(error);
     }
   };
@@ -61,8 +67,12 @@ function AdminProductList() {
       <Container>
         <Flash
           isShow={showFlash}
-          message="This is a success Alert."
-          severity="success"
+          message={
+            flashSeverity === "success"
+              ? "Delete Successfully."
+              : "Delete Failed."
+          }
+          severity={flashSeverity}
           onClose={handleCloseFlash}
         />
         <Stack gap={2}>
@@ -112,7 +122,7 @@ function AdminProductList() {
                         gap={3}
                         justifyContent={"center"}
                       >
-                        <Link to={""}>
+                        <Link to={"/admin/edit/" + prd._id}>
                           <Button
                             variant="contained"
                             sx={{ bgcolor: "blue", padding: " 10px 0px" }}

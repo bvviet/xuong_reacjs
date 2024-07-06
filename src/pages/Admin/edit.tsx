@@ -15,28 +15,44 @@ import {
 import axios from "axios";
 import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProductForm } from "../../types/products";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Flash from "../../components/admin/Flash/flash";
 
-function AdminProductAdd() {
+function AdminProductEdit() {
   const nav = useNavigate();
+  const { productId } = useParams();
+  const [initialValues, setInitialValues] = useState<ProductForm | null>(null);
   const [showFlash, setShowFlash] = useState(false);
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/products/${productId}`);
+        setInitialValues(response.data);
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
   const onSubmit = async (values: ProductForm) => {
     try {
-      await axios.post("/products", values);
+      await axios.put(`/products/${productId}`, values);
       setFlashSeverity("success");
       setShowFlash(true);
       setTimeout(() => {
         nav("/admin/list");
       }, 2000);
     } catch (error) {
-      setFlashSeverity("error");
       console.error(error);
+      setFlashSeverity("error");
       setShowFlash(true);
     }
   };
@@ -63,7 +79,9 @@ function AdminProductAdd() {
         <Flash
           isShow={showFlash}
           message={
-            flashSeverity === "success" ? "Add Successfully." : "Add Failed."
+            flashSeverity === "success"
+              ? "Update Successfully."
+              : "Update Failed."
           }
           severity={flashSeverity}
           onClose={handleCloseFlash}
@@ -73,12 +91,12 @@ function AdminProductAdd() {
           sx={{ justifyContent: "center", margin: "auto", maxWidth: 600 }}
         >
           <Typography variant="h3" textAlign="center">
-            Add Product
+            Edit Product
           </Typography>
           <Form
             onSubmit={onSubmit}
             validate={validate}
-            initialValues={{ isShow: true }}
+            initialValues={initialValues}
             render={({ handleSubmit, submitting }) => (
               <form onSubmit={handleSubmit}>
                 <Stack gap={2} sx={{ fontSize: "1.6rem", fontWeight: "500" }}>
@@ -180,4 +198,4 @@ function AdminProductAdd() {
   );
 }
 
-export default AdminProductAdd;
+export default AdminProductEdit;
