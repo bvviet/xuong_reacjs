@@ -1,16 +1,40 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Rating, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Grid, Rating, Stack, Typography } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
+import { ProductsContext } from "../../contexts/ProductsContext";
 import phone from "../../assets/icons/phone.svg";
 import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { IProduct } from "../../types/products";
 
 const DetailClient = () => {
+    const [product, setProduct] = useState<IProduct | undefined>(undefined);
+    const { id } = useParams<{ id: string }>();
+    const context = useContext(ProductsContext);
+    const { products } = context;
+
+    useEffect(() => {
+        const fetchDetail = async () => {
+            try {
+                if (id) {
+                    const response = await axios.get(`http://localhost:3000/products/${id}`);
+                    setProduct(response.data);
+                }
+            } catch (error) {
+                console.error("Error fetching product detail:", error);
+            }
+        };
+        fetchDetail();
+    }, [id]);
+
     return (
         <>
             <Stack direction="row" spacing={8} sx={{ margin: "130px 0" }}>
                 <Box>
                     <img
-                        src="https://cdn.authentic-shoes.com/wp-content/uploads/2024/02/Giay-Nike-Air-Jordan-4-Retro-Bred-Reimagined-FV5029%E2%80%91006-2-768x510.png"
+                        src={product?.image}
                         alt=""
                         style={{
                             border: "solid 1px #eee",
@@ -22,10 +46,8 @@ const DetailClient = () => {
                     />
                 </Box>
                 <Box>
-                    <Typography sx={{ fontSize: "1.4rem", color: "#288ad6" }}>Air Jordan 4</Typography>
-                    <Typography sx={{ fontSize: "1.8rem", padding: "10px 0" }}>
-                        Giày Nike Air Jordan 4 Retro ‘Bred Reimagined’ FV5029-006
-                    </Typography>
+                    <Typography sx={{ fontSize: "1.4rem", color: "#288ad6" }}>{product?.category.name}</Typography>
+                    <Typography sx={{ fontSize: "1.8rem", padding: "10px 0" }}>{product?.name}</Typography>
                     <Rating
                         name="half-rating-read"
                         defaultValue={2.5}
@@ -35,7 +57,7 @@ const DetailClient = () => {
                         sx={{ marginTop: "10px" }}
                     />
                     <Typography sx={{ fontSize: "1.8rem", padding: "10px 0", fontWeight: "700" }}>
-                        7,500,000 ₫
+                        {product?.price} ₫
                     </Typography>
 
                     <Stack direction="row" spacing={3}>
@@ -85,99 +107,39 @@ const DetailClient = () => {
                 rowGap={{ xs: 2, sm: 2, md: 4 }}
                 sx={{ margin: "30px 0" }}
             >
-                <Grid item xs={3}>
-                    <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
-                        <Link to="#">
-                            <img
-                                style={{ height: 140, width: "100%", objectFit: "cover" }}
-                                src="https://cdn.authentic-shoes.com/wp-content/uploads/2024/02/Giay-Nike-Air-Jordan-4-Retro-Bred-Reimagined-FV5029%E2%80%91006-2-768x510.png"
-                                title="green iguana"
-                            />
-                        </Link>
-                        <Box sx={{ padding: "16px" }}>
-                            <CardContent sx={{ padding: "0" }}>
-                                <Typography
-                                    sx={{ color: "#1A162E", fontSize: "1.6rem", fontWeight: "500" }}
-                                    gutterBottom
-                                >
-                                    Coffee Beans - Espresso Arabica and Robusta Beans
+                {products.map((value) => (
+                    <Grid item xs={3} key={value._id}>
+                        <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
+                            <Link to={`/detail/${value._id}`}>
+                                <img
+                                    style={{ height: 140, width: "100%", objectFit: "cover" }}
+                                    src={value.image}
+                                    title="green iguana"
+                                />
+                            </Link>
+                            <Box sx={{ padding: "16px" }}>
+                                <CardContent sx={{ padding: "0" }}>
+                                    <Typography
+                                        sx={{ color: "#1A162E", fontSize: "1.6rem", fontWeight: "500" }}
+                                        gutterBottom
+                                    >
+                                        {value.name}
+                                    </Typography>
+                                    <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
+                                        {value.price}đ
+                                    </Typography>
+                                </CardContent>
+                                <Typography sx={{ margin: "12px 0", fontSize: "1.5rem", color: "#9E9DA8" }}>
+                                    {value.category?.name}
                                 </Typography>
-                                <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
-                                    120.000đ
-                                </Typography>
-                            </CardContent>
-                            <Typography sx={{ margin: "12px 0", fontSize: "1.5rem", color: "#9E9DA8" }}>
-                                Điện thoại
-                            </Typography>
-                            <CardActions sx={{ display: "flex", justifyContent: "space-between", padding: "0" }}>
-                                <Rating name="read-only" value={3.5} precision={0.1} readOnly />
-                                <Button sx={{ fontSize: "1.1rem" }}>Add to card</Button>
-                            </CardActions>
-                        </Box>
-                    </Card>
-                </Grid>
-                <Grid item xs={3}>
-                    <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
-                        <Link to="#">
-                            <img
-                                style={{ height: 140, width: "100%", objectFit: "cover" }}
-                                src="https://cdn.authentic-shoes.com/wp-content/uploads/2024/02/Giay-Nike-Air-Jordan-4-Retro-Bred-Reimagined-FV5029%E2%80%91006-2-768x510.png"
-                                title="green iguana"
-                            />
-                        </Link>
-                        <Box sx={{ padding: "16px" }}>
-                            <CardContent sx={{ padding: "0" }}>
-                                <Typography
-                                    sx={{ color: "#1A162E", fontSize: "1.6rem", fontWeight: "500" }}
-                                    gutterBottom
-                                >
-                                    Coffee Beans - Espresso Arabica and Robusta Beans
-                                </Typography>
-                                <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
-                                    120.000đ
-                                </Typography>
-                            </CardContent>
-                            <Typography sx={{ margin: "12px 0", fontSize: "1.5rem", color: "#9E9DA8" }}>
-                                Điện thoại
-                            </Typography>
-                            <CardActions sx={{ display: "flex", justifyContent: "space-between", padding: "0" }}>
-                                <Rating name="read-only" value={3.5} precision={0.1} readOnly />
-                                <Button sx={{ fontSize: "1.1rem" }}>Add to card</Button>
-                            </CardActions>
-                        </Box>
-                    </Card>
-                </Grid>
-                <Grid item xs={3}>
-                    <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
-                        <Link to="#">
-                            <img
-                                style={{ height: 140, width: "100%", objectFit: "cover" }}
-                                src="https://cdn.authentic-shoes.com/wp-content/uploads/2024/02/Giay-Nike-Air-Jordan-4-Retro-Bred-Reimagined-FV5029%E2%80%91006-2-768x510.png"
-                                title="green iguana"
-                            />
-                        </Link>
-                        <Box sx={{ padding: "16px" }}>
-                            <CardContent sx={{ padding: "0" }}>
-                                <Typography
-                                    sx={{ color: "#1A162E", fontSize: "1.6rem", fontWeight: "500" }}
-                                    gutterBottom
-                                >
-                                    Coffee Beans - Espresso Arabica and Robusta Beans
-                                </Typography>
-                                <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
-                                    120.000đ
-                                </Typography>
-                            </CardContent>
-                            <Typography sx={{ margin: "12px 0", fontSize: "1.5rem", color: "#9E9DA8" }}>
-                                Điện thoại
-                            </Typography>
-                            <CardActions sx={{ display: "flex", justifyContent: "space-between", padding: "0" }}>
-                                <Rating name="read-only" value={3.5} precision={0.1} readOnly />
-                                <Button sx={{ fontSize: "1.1rem" }}>Add to card</Button>
-                            </CardActions>
-                        </Box>
-                    </Card>
-                </Grid>
+                                <CardActions sx={{ display: "flex", justifyContent: "space-between", padding: "0" }}>
+                                    <Rating name="read-only" value={3.5} precision={0.1} readOnly />
+                                    <Button sx={{ fontSize: "1.1rem" }}>Add to card</Button>
+                                </CardActions>
+                            </Box>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
         </>
     );

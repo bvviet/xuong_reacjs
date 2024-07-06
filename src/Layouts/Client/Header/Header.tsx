@@ -66,11 +66,13 @@ function Header() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{}}>
                     {/* Logo */}
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA2MSeKgctfF4s5UrZQTz03Vsnl9ke1tJniA&s"
-                        alt=""
-                        style={{ width: "40px", marginRight: "15px" }}
-                    />
+                    <Link to={"/"}>
+                        <img
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA2MSeKgctfF4s5UrZQTz03Vsnl9ke1tJniA&s"
+                            alt=""
+                            style={{ width: "40px", marginRight: "15px" }}
+                        />
+                    </Link>
                     <Typography
                         variant="h6"
                         noWrap
