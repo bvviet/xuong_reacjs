@@ -106,6 +106,10 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
                         position: "top-right",
                         autoClose: 1500,
                     });
+                    localStorage.setItem("token", response.data.token);
+                    setTimeout(() => {
+                        onCloseLogin();
+                    }, 2500);
                 }
             } catch (error: unknown) {
                 let errorMessage = "";
@@ -189,7 +193,7 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
                             <CustomTextField
                                 {...register("password", { required: "Mật khẩu không được để trống" })}
                                 id="outlined-basic-3"
-                                label="Password"
+                                label="Mật khẩu"
                                 type="password"
                                 variant="outlined"
                                 error={!!errors.password}

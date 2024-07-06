@@ -67,6 +67,7 @@ interface RegisterProps {
     handleOpenRegister: boolean;
     onCloseRegister: () => void;
     onSwitchToLogin: () => void;
+    OpenLogin: () => void;
 }
 
 interface IFormInput {
@@ -75,7 +76,7 @@ interface IFormInput {
     password: string;
 }
 
-const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister, onSwitchToLogin }) => {
+const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister, onSwitchToLogin, OpenLogin }) => {
     const [messages, setMessages] = useState("");
     const {
         register,
@@ -105,6 +106,9 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
                         position: "top-right",
                         autoClose: 1500,
                     });
+                    setTimeout(() => {
+                        OpenLogin();
+                    }, 2500);
                 }
             } catch (error: unknown) {
                 let errorMessage = "";
@@ -201,7 +205,7 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
                             <CustomTextField
                                 {...register("password", { required: "Mật khẩu không được để trống" })}
                                 id="outlined-basic-3"
-                                label="Password"
+                                label="Mật khẩu"
                                 type="password"
                                 variant="outlined"
                                 error={!!errors.password}

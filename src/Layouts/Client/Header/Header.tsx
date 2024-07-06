@@ -38,8 +38,8 @@ function Header() {
     const handleOpenLogin = () => setOpenLogin(true);
     const handleCloseLogin = () => setOpenLogin(false);
 
+    const token = localStorage.getItem("token");
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -104,67 +104,74 @@ function Header() {
                     {/* Tìm kiếm */}
                     <Search />
                     {/* Avatar */}
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip sx={{ fontSize: "1.6rem" }} title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: "45px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            <MenuItem onClick={handleCloseUserMenu}>
-                                <Typography
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "flex-start",
-                                        fontSize: "1.6rem",
-                                        gap: "10px",
-                                    }}
-                                    textAlign="center"
-                                >
-                                    <Link to={"/profile"}>Profile</Link>
-                                    <Link to={"/account"}>Account</Link>
-                                    <Link to={"/dashboard"}>Dashboard</Link>
-                                    <Link to={"/logout"}>Logout</Link>
-                                </Typography>
-                            </MenuItem>
-                        </Menu>
-                    </Box>
+                    {token && (
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip sx={{ fontSize: "1.6rem" }} title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: "45px" }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "flex-start",
+                                            fontSize: "1.6rem",
+                                            gap: "10px",
+                                        }}
+                                        textAlign="center"
+                                    >
+                                        <Link to={"/profile"}>Profile</Link>
+                                        <Link to={"/account"}>Account</Link>
+                                        <Link to={"/dashboard"}>Dashboard</Link>
+                                        <Link to={"#"} onClick={() => localStorage.removeItem("token")}>
+                                            Logout
+                                        </Link>
+                                    </Typography>
+                                </MenuItem>
+                            </Menu>
+                        </Box>
+                    )}
                     {/* Đăng ký đăng nhập */}
-                    <Stack spacing={2} direction="row">
-                        <CustomButton onClick={handleOpenLogin} variant="text" size="large">
-                            Đăng nhập
-                        </CustomButton>
-                        <Login
-                            handleOpenLogin={openLogin}
-                            onCloseLogin={handleCloseLogin}
-                            onSwitchToRegister={handleOpenRegister}
-                        />
+                    {!token && (
+                        <Stack spacing={2} direction="row">
+                            <CustomButton onClick={handleOpenLogin} variant="text" size="large">
+                                Đăng nhập
+                            </CustomButton>
+                            <Login
+                                handleOpenLogin={openLogin}
+                                onCloseLogin={handleCloseLogin}
+                                onSwitchToRegister={handleOpenRegister}
+                            />
 
-                        <CustomButton onClick={handleOpenRegister} variant="contained" size="large">
-                            Đăng ký
-                        </CustomButton>
-                        <Register
-                            handleOpenRegister={openRegister}
-                            onCloseRegister={handleCloseRegister}
-                            onSwitchToLogin={handleOpenLogin}
-                        />
-                    </Stack>
+                            <CustomButton onClick={handleOpenRegister} variant="contained" size="large">
+                                Đăng ký
+                            </CustomButton>
+                            <Register
+                                handleOpenRegister={openRegister}
+                                onCloseRegister={handleCloseRegister}
+                                onSwitchToLogin={handleOpenLogin}
+                                OpenLogin={handleOpenLogin}
+                            />
+                        </Stack>
+                    )}
                 </Toolbar>
             </Container>
         </StyledAppBar>
