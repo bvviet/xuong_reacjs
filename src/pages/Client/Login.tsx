@@ -63,19 +63,18 @@ const CustomTextField = styled(TextField)`
     }
 `;
 
-interface RegisterProps {
-    handleOpenRegister: boolean;
-    onCloseRegister: () => void;
-    onSwitchToLogin: () => void;
+interface LoginProps {
+    handleOpenLogin: boolean;
+    onCloseLogin: () => void;
+    onSwitchToRegister: () => void;
 }
 
 interface IFormInput {
-    username: string;
     email: string;
     password: string;
 }
 
-const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister, onSwitchToLogin }) => {
+const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchToRegister }) => {
     const [messages, setMessages] = useState("");
     const {
         register,
@@ -96,12 +95,14 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
     }, [messages]);
 
     const onSubmit: SubmitHandler<IFormInput> = (data) => {
-        const handleRegister = async () => {
+        console.log(data);
+
+        const handleLogin = async () => {
             try {
-                const response = await axios.post("http://localhost:3000/auth/register", data);
+                const response = await axios.post("http://localhost:3000/auth/login", data);
                 console.log(response);
                 if (response.status === 200) {
-                    toast.success("Đăng ký thành công!", {
+                    toast.success("Đăng nhập thành công!", {
                         position: "top-right",
                         autoClose: 1500,
                     });
@@ -128,15 +129,13 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
             }
         };
 
-        handleRegister();
+        handleLogin();
     };
-
-    console.log(messages);
 
     return (
         <Modal
-            open={handleOpenRegister}
-            onClose={onCloseRegister}
+            open={handleOpenLogin}
+            onClose={onCloseLogin}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             closeAfterTransition
@@ -147,7 +146,7 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
         >
             <Box sx={style}>
                 <Stack direction="row" justifyContent="flex-end">
-                    <ClearIcon fontSize="large" sx={{ cursor: "pointer" }} onClick={onCloseRegister} />
+                    <ClearIcon fontSize="large" sx={{ cursor: "pointer" }} onClick={onCloseLogin} />
                 </Stack>
 
                 <Stack direction="column" justifyContent="center" alignItems="center" sx={{ marginTop: "0" }}>
@@ -162,7 +161,7 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
                         id="modal-modal-description"
                         sx={{ mt: 2, fontSize: "2.8rem", fontWeight: "700", lineHeight: "1.4", marginBottom: "12px" }}
                     >
-                        Đăng ký tài khoản Double V
+                        Đăng nhập vào Double V
                     </Typography>
                     <Typography
                         sx={{
@@ -177,18 +176,7 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
 
                     {/* Form */}
                     <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: "20px" }}>
-                        <Stack spacing={3}>
-                            <CustomTextField
-                                {...register("username", {
-                                    required: "Tên không được để trống",
-                                    minLength: { value: 2, message: "Tên bắt buộc phải lớn hơn 2 kí tự" },
-                                })}
-                                id="outlined-basic-1"
-                                label="Tên tài khoản"
-                                variant="outlined"
-                                error={!!errors.username}
-                                helperText={errors.username ? errors.username.message : null}
-                            />
+                        <Stack spacing={2}>
                             <CustomTextField
                                 type="email"
                                 {...register("email", { required: "Email không được để trống" })}
@@ -214,7 +202,7 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
                                 variant="contained"
                                 sx={{ borderRadius: "999px", padding: "13px", fontSize: "1.3rem" }}
                             >
-                                Đăng ký
+                                Đăng nhập
                             </Button>
                         </Stack>
                     </form>
@@ -227,7 +215,7 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
                         sx={{ marginTop: "20px" }}
                     >
                         <Typography sx={{ fontSize: "1.4rem", lineHeight: "1.8" }}>
-                            Bạn đã có tài khoản?
+                            Bạn chưa có tài khoản?
                             <Link
                                 to={"#"}
                                 style={{
@@ -238,11 +226,11 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
                                 }}
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    onCloseRegister();
-                                    onSwitchToLogin();
+                                    onCloseLogin();
+                                    onSwitchToRegister();
                                 }}
                             >
-                                Đăng nhập
+                                Đăng ký
                             </Link>
                         </Typography>
                         <Typography
@@ -274,4 +262,4 @@ const Register: React.FC<RegisterProps> = ({ handleOpenRegister, onCloseRegister
     );
 };
 
-export default Register;
+export default Login;
