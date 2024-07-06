@@ -1,9 +1,13 @@
-import React from "react";
-import { Backdrop, Box, Modal, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Backdrop, Box, Button, Modal, Stack, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { styled } from "@mui/system";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const style = {
     position: "absolute",
@@ -17,6 +21,7 @@ const style = {
     p: 4,
     borderRadius: "16px",
     animationDuration: ".3s",
+    overflowY: "auto",
 };
 
 const CustomTextField = styled(TextField)`
@@ -41,10 +46,19 @@ const CustomTextField = styled(TextField)`
             border-color: #1dbfaf;
         }
         & .MuiInputBase-input {
-            font-size: 1.6rem; /* Kích thước chữ khi nhập vào */
-            padding: 15px; /* Khoảng cách giữa nội dung và viền input */
-            height: auto; /* Chiều cao tự động theo nội dung */
-            width: 100%; /* Chiều rộng tự động */
+            font-size: 1.6rem;
+            padding: 15px;
+            height: auto;
+            width: 100%;
+        }
+        & .MuiFormHelperText-root {
+            /*helperText */
+            margin-top: 9px;
+            font-size: 1.4rem;
+            color: #f33a58;
+            margin-left: 8px;
+            font-weight: 500;
+            line-height: 1.5;
         }
     }
 `;
@@ -54,7 +68,69 @@ interface RegisterProps {
     onClose: () => void;
 }
 
+interface IFormInput {
+    username: string;
+    email: string;
+    password: string;
+}
+
 const Register: React.FC<RegisterProps> = ({ open, onClose }) => {
+    const [messages, setMessages] = useState("");
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IFormInput>({
+        mode: "onBlur",
+    });
+
+    useEffect(() => {
+        if (messages) {
+            toast.error(messages, {
+                position: "top-right",
+                autoClose: 2000,
+            });
+            setMessages("");
+        }
+    }, [messages]);
+
+    const onSubmit: SubmitHandler<IFormInput> = (data) => {
+        const handleRegister = async () => {
+            try {
+                const response = await axios.post("http://localhost:3000/auth/register", data);
+                console.log(response);
+                if (response.status === 200) {
+                    toast.success("Đăng ký thành công!", {
+                        position: "top-right",
+                        autoClose: 1500,
+                    });
+                }
+            } catch (error: unknown) {
+                let errorMessage = "";
+                if (axios.isAxiosError(error)) {
+                    if (error.response) {
+                        if (error.response.status === 404) {
+                            errorMessage = "API hiện đang bị lỗi";
+                            return;
+                        }
+                        errorMessage = `${error.response.data.message}`;
+                    } else if (error.request) {
+                        errorMessage = "Vui lòng kiểm tra lại mạng!";
+                    } else if (error.message === "Network Error") {
+                        errorMessage = "Vui lòng kiểm tra lại kết nối mạng!";
+                    } else {
+                        errorMessage = `Lỗi khác từ Axios xảy ra:${error.message}`;
+                    }
+                    setMessages(errorMessage);
+                } else {
+                    console.log("Lỗi khác xảy ra:", (error as Error).message);
+                }
+            }
+        };
+
+        handleRegister();
+    };
+
     return (
         <Modal
             open={open}
@@ -72,12 +148,12 @@ const Register: React.FC<RegisterProps> = ({ open, onClose }) => {
                     <ClearIcon fontSize="large" sx={{ cursor: "pointer" }} onClick={onClose} />
                 </Stack>
 
-                <Stack direction="column" justifyContent="center" alignItems="center" sx={{ marginTop: "35px" }}>
+                <Stack direction="column" justifyContent="center" alignItems="center" sx={{ marginTop: "0" }}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         <img
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA2MSeKgctfF4s5UrZQTz03Vsnl9ke1tJniA&s"
                             alt=""
-                            style={{width:"40px"}}
+                            style={{ width: "40px" }}
                         />
                     </Typography>
                     <Typography
@@ -97,16 +173,47 @@ const Register: React.FC<RegisterProps> = ({ open, onClose }) => {
                         Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng chung sẽ bị khóa.
                     </Typography>
 
-                    <form style={{ marginTop: "30px" }}>
+                    {/* Form */}
+                    <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: "20px" }}>
                         <Stack spacing={3}>
-                            <CustomTextField id="outlined-basic-1" label="Tên tài khoản" variant="outlined" />
-                            <CustomTextField id="outlined-basic-2" label="Email" variant="outlined" />
                             <CustomTextField
+                                {...register("username", {
+                                    required: "Tên không được để trống",
+                                    minLength: { value: 2, message: "Tên bắt buộc phải lớn hơn 2 kí tự" },
+                                })}
+                                id="outlined-basic-1"
+                                label="Tên tài khoản"
+                                variant="outlined"
+                                error={!!errors.username}
+                                helperText={errors.username ? errors.username.message : null}
+                            />
+                            <CustomTextField
+                                type="email"
+                                {...register("email", { required: "Email không được để trống" })}
+                                id="outlined-basic-2"
+                                label="Email"
+                                variant="outlined"
+                                error={!!errors.email}
+                                helperText={errors.email ? errors.email.message : null}
+                            />
+                            <CustomTextField
+                                {...register("password", { required: "Mật khẩu không được để trống" })}
                                 id="outlined-basic-3"
                                 label="Password"
                                 type="password"
                                 variant="outlined"
+                                error={!!errors.password}
+                                helperText={errors.password ? errors.password.message : null}
                             />
+                        </Stack>
+                        <Stack sx={{ marginTop: "20px", width: "100%" }}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{ borderRadius: "999px", padding: "13px", fontSize: "1.3rem" }}
+                            >
+                                Đăng ký
+                            </Button>
                         </Stack>
                     </form>
 
@@ -114,8 +221,8 @@ const Register: React.FC<RegisterProps> = ({ open, onClose }) => {
                         direction="column"
                         justifyContent="center"
                         alignItems="center"
-                        spacing={"15px"}
-                        sx={{ marginTop: "34px" }}
+                        spacing={"10px"}
+                        sx={{ marginTop: "20px" }}
                     >
                         <Typography sx={{ fontSize: "1.4rem", lineHeight: "1.8" }}>
                             Bạn đã có tài khoản?
