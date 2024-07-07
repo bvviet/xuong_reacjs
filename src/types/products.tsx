@@ -24,3 +24,8 @@ export type ProductForm = {
   category: string;
   isShow: boolean;
 };
+
+export type LoaderData = {
+  product: IProduct[];
+  cate: Category[];
+};
