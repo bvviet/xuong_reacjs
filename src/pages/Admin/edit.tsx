@@ -16,7 +16,7 @@ import axios from "axios";
 import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductForm } from "../../types/products";
+import { Category, ProductForm } from "../../types/products";
 import { useEffect, useState } from "react";
 import Flash from "../../components/admin/Flash/flash";
 
@@ -25,9 +25,23 @@ function AdminProductEdit() {
   const { productId } = useParams();
   const [initialValues, setInitialValues] = useState<ProductForm | null>(null);
   const [showFlash, setShowFlash] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
+  useEffect(() => {
+    // Fetch categories from the API
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -168,12 +182,11 @@ function AdminProductEdit() {
                       >
                         <InputLabel>Select category</InputLabel>
                         <Select label="Category" {...input}>
-                          <MenuItem value="668831b1f39653511acf5729">
-                            Rau
-                          </MenuItem>
-                          <MenuItem value="66883216f39653511acf572d">
-                            Quả
-                          </MenuItem>
+                          {categories.map((category) => (
+                            <MenuItem key={category._id} value={category._id}>
+                              {category.name}
+                            </MenuItem>
+                          ))}
                         </Select>
                         {meta.touched && meta.error && (
                           <FormHelperText>{meta.error}</FormHelperText>

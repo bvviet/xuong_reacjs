@@ -16,8 +16,8 @@ import axios from "axios";
 import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
 import { useNavigate } from "react-router-dom";
-import { ProductForm } from "../../types/products";
-import { useState } from "react";
+import { ProductForm, Category } from "../../types/products";
+import { useState, useEffect } from "react";
 import Flash from "../../components/admin/Flash/flash";
 
 function AdminProductAdd() {
@@ -26,6 +26,22 @@ function AdminProductAdd() {
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    // Fetch categories from the API
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const onSubmit = async (values: ProductForm) => {
     try {
       await axios.post("/products", values);
@@ -150,12 +166,11 @@ function AdminProductAdd() {
                       >
                         <InputLabel>Select category</InputLabel>
                         <Select label="Category" {...input}>
-                          <MenuItem value="668831b1f39653511acf5729">
-                            Rau
-                          </MenuItem>
-                          <MenuItem value="66883216f39653511acf572d">
-                            Quả
-                          </MenuItem>
+                          {categories.map((category) => (
+                            <MenuItem key={category._id} value={category._id}>
+                              {category.name}
+                            </MenuItem>
+                          ))}
                         </Select>
                         {meta.touched && meta.error && (
                           <FormHelperText>{meta.error}</FormHelperText>
