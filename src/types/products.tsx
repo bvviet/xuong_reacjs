@@ -24,6 +24,9 @@ export type ProductForm = {
   category: string;
   isShow: boolean;
 };
+export type GenreFrom = {
+  name: string;
+};
 
 export type LoaderData = {
   product: IProduct[];

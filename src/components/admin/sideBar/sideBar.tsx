@@ -18,6 +18,8 @@ function Sidebar() {
   const menuItems = [
     { text: "List Product", path: "/admin/list" },
     { text: "Add Product", path: "/admin/add" },
+    { text: "List Category", path: "/admin/listGenre" },
+    { text: "Add Category", path: "/admin/addGenre" },
   ];
 
   return (
