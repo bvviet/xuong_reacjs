@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Backdrop, Box, Button, Modal, Stack, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 const style = {
     position: "absolute",
@@ -76,6 +78,12 @@ interface IFormInput {
 
 const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchToRegister }) => {
     const [messages, setMessages] = useState("");
+    const context = useContext(LoadingContext);
+    // Kiểm tra nếu context là undefined để tránh lỗi
+    if (!context) {
+        throw new Error("LoadingContext must be used within a LoadingProvider");
+    }
+    const { setIsLoading } = context;
     const {
         register,
         handleSubmit,
@@ -99,6 +107,7 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
 
         const handleLogin = async () => {
             try {
+                setIsLoading(true);
                 const response = await axios.post("http://localhost:3000/auth/login", data);
                 console.log(response);
                 if (response.status === 200) {
@@ -130,6 +139,8 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
                 } else {
                     console.log("Lỗi khác xảy ra:", (error as Error).message);
                 }
+            } finally {
+                setIsLoading(false);
             }
         };
 
