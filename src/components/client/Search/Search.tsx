@@ -1,5 +1,5 @@
 import "./Search.css";
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import search from "../../../assets/icons/Search.svg";
 import loadingSearch from "../../../assets/icons/loadingSearch.svg";
 import clear from "../../../assets/icons/clear.svg";
@@ -7,15 +7,14 @@ import { useEffect, useRef, useState } from "react";
 import Tippy from "@tippyjs/react/headless";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import IProduct from "../../../types/products"; // Adjust this import based on your project structure
-
-import card from "../../../assets/images/card1.png";
+import { IProduct } from "../../../types/products";
+import FormatPrice from "../FormatPrice/FormatPrice";
 
 const Search = () => {
-    const [searchResult, setSearchResult] = useState<Array<IProduct>>([]);
+    const [searchResult, setSearchResult] = useState<IProduct[]>([]);
     const [valueInput, setValueInput] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [showTippy, setShowTippy] = useState<boolean>(false); // State to control Tippy visibility
+    const [showTippy, setShowTippy] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleHideResult = () => {
@@ -37,7 +36,7 @@ const Search = () => {
         const fetchProduct = async () => {
             try {
                 setLoading(true);
-                const result = await axios.get("https://project-one-navy.vercel.app/product/search", {
+                const result = await axios.get("http://localhost:3000/products/search", {
                     params: {
                         name: valueInput,
                     },
@@ -71,15 +70,39 @@ const Search = () => {
                         <hr style={{ opacity: "0.3" }} />
                         {searchResult.map((item) => (
                             <div className="result-item" key={item._id}>
-                                <Link to={"#"} className="link-result">
-                                    <img src={card} alt="" className="img-result" />
-                                    <Typography sx={{ fontSize: "1.4rem", fontWeight: "400", lineHeight: "1.6" }}>
-                                        {item.name}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: "1.2rem", color: "gray" }}>
-                                        Price: ${item.price} | Stock: {item.stock}
+                                <Link
+                                    to={`/detail/${item._id}`}
+                                    className="link-result"
+                                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                                >
+                                    <Stack direction="row" spacing={2}>
+                                        <img src={item.image} alt="" className="img-result" />
+                                        <Typography sx={{ fontSize: "1.4rem", fontWeight: "500", lineHeight: "1.6" }}>
+                                            {item.name}
+                                        </Typography>
+                                    </Stack>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            maxWidth: "126px",
+                                            fontSize: "1.2rem",
+                                            color: "gray",
+                                        }}
+                                    >
+                                        Giá:
+                                        <Box sx={{ marginLeft: "4px" }}>
+                                            <FormatPrice price={item.price} />
+                                        </Box>
+                                        <Box>
+                                            Danh mục:{" "}
+                                            <Typography component="span" sx={{ color: "#53382c", fontWeight: "700" }}>
+                                                {item.category?.name}
+                                            </Typography>
+                                        </Box>
                                     </Typography>
                                 </Link>
+                                <hr style={{ opacity: "0.3" }} />
                             </div>
                         ))}
                     </div>

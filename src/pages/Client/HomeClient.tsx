@@ -4,6 +4,7 @@ import { useContext } from "react";
 
 import { ProductsContext } from "../../contexts/ProductsContext";
 import SlideShow from "../../components/client/SliceShow/SliceShow";
+import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 
 const HomeClient = () => {
     const context = useContext(ProductsContext);
@@ -41,7 +42,7 @@ const HomeClient = () => {
                                         {product.name}
                                     </Typography>
                                     <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
-                                        {product.price}đ
+                                        <FormatPrice price={product.price} />
                                     </Typography>
                                 </CardContent>
                                 <Typography sx={{ margin: "12px 0", fontSize: "1.5rem", color: "#9E9DA8" }}>
