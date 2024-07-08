@@ -1,5 +1,7 @@
 import * as React from "react";
 import { styled } from "@mui/system";
+import { Link } from "react-router-dom";
+import { Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,8 +15,6 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-import { Link } from "react-router-dom";
-import { Stack } from "@mui/material";
 import Search from "../../../components/client/Search/Search";
 import Register from "../../../pages/Client/Register";
 import Login from "../../../pages/Client/Login";
@@ -110,11 +110,14 @@ function Header() {
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip sx={{ fontSize: "1.6rem" }} title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                    <Avatar
+                                        alt="Viet"
+                                        src="https://vov.vn/sites/default/files/styles/large/public/2021-08/CR7%202.jpg"
+                                    />
                                 </IconButton>
                             </Tooltip>
                             <Menu
-                                sx={{ mt: "45px" }}
+                                sx={{ mt: "50px" }}
                                 id="menu-appbar"
                                 anchorEl={anchorElUser}
                                 anchorOrigin={{
@@ -136,15 +139,17 @@ function Header() {
                                             flexDirection: "column",
                                             alignItems: "flex-start",
                                             fontSize: "1.6rem",
-                                            gap: "10px",
+                                            gap: "20px",
+                                            width: "200px",
+                                            padding: "10px",
                                         }}
                                         textAlign="center"
                                     >
-                                        <Link to={"/profile"}>Profile</Link>
-                                        <Link to={"/account"}>Account</Link>
-                                        <Link to={"/dashboard"}>Dashboard</Link>
+                                        <Link to={"/profile"}>Trang cá nhân</Link>
+                                        <Link to={"/account"}>Tài khoản</Link>
+                                        <Link to={"/admin"}>Trang quản trị</Link>
                                         <Link to={"#"} onClick={() => localStorage.removeItem("token")}>
-                                            Logout
+                                            Đăng xuất
                                         </Link>
                                     </Typography>
                                 </MenuItem>

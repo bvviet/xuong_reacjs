@@ -109,13 +109,14 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
             try {
                 setIsLoading(true);
                 const response = await axios.post("http://localhost:3000/auth/login", data);
-                console.log(response);
+                console.log(response.data.user);
                 if (response.status === 200) {
                     toast.success("Đăng nhập thành công!", {
                         position: "top-right",
                         autoClose: 1500,
                     });
                     localStorage.setItem("token", response.data.token);
+                    localStorage.setItem("user", JSON.stringify(response.data.user));
                     setTimeout(() => {
                         onCloseLogin();
                     }, 2500);

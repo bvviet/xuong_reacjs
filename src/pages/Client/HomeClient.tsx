@@ -8,8 +8,7 @@ import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 
 const HomeClient = () => {
     const context = useContext(ProductsContext);
-    const { products } = context;
-    console.log(products);
+    const { products } = context;       
 
     return (
         <>
