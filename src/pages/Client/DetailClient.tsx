@@ -8,6 +8,7 @@ import phone from "../../assets/icons/phone.svg";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { IProduct } from "../../types/products";
+import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 
 const DetailClient = () => {
     const [product, setProduct] = useState<IProduct | undefined>(undefined);
@@ -57,7 +58,7 @@ const DetailClient = () => {
                         sx={{ marginTop: "10px" }}
                     />
                     <Typography sx={{ fontSize: "1.8rem", padding: "10px 0", fontWeight: "700" }}>
-                        {product?.price} ₫
+                        <FormatPrice price={product?.price} />
                     </Typography>
 
                     <Stack direction="row" spacing={3}>
@@ -126,7 +127,7 @@ const DetailClient = () => {
                                         {value.name}
                                     </Typography>
                                     <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
-                                        {value.price}đ
+                                        <FormatPrice price={value.price} />
                                     </Typography>
                                 </CardContent>
                                 <Typography sx={{ margin: "12px 0", fontSize: "1.5rem", color: "#9E9DA8" }}>
