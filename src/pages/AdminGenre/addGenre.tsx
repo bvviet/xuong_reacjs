@@ -42,7 +42,7 @@ function AddGenre() {
 
   return (
     <>
-      <Container>
+      <Container sx={{marginTop:"24px"}}>
         <Flash
           isShow={showFlash}
           message={
@@ -55,7 +55,7 @@ function AddGenre() {
           gap={2}
           sx={{ justifyContent: "center", margin: "auto", maxWidth: 600 }}
         >
-          <Typography variant="h3" textAlign="center">
+          <Typography variant="h3" sx={{ fontSize: "3.5rem" }}  textAlign="center">
             Add Category
           </Typography>
           <Form

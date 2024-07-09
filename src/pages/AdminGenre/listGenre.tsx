@@ -64,7 +64,7 @@ function GenreList() {
 
   return (
     <>
-      <Container>
+      <Container sx={{ marginTop: "24px" }}>
         <Flash
           isShow={showFlash}
           message={
@@ -79,7 +79,7 @@ function GenreList() {
           <Typography
             variant="h2"
             textAlign="center"
-            sx={{ fontSize: "2.5rem" }}
+            sx={{ fontSize: "3.5rem" }}
           >
             Category List
           </Typography>
