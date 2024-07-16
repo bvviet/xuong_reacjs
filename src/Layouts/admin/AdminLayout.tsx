@@ -1,31 +1,34 @@
 import { ThemeProvider } from "@mui/material/styles";
 import { Stack } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/admin/sideBar/sideBar";
-import theme from "../../components/admin/theme/theme";
-import { useContext } from "react";
-import { LoadingContext } from "../../contexts/LoadingContext";
-import Loading from "../../components/client/Loading/Loading";
+import { useContext, useEffect } from "react";
+import { UserContext } from "../../contexts/userContext";
 
 function AdminLayout() {
-  const context = useContext(LoadingContext);
+    const { user } = useContext(UserContext);
+    console.log(user);
 
-  if (!context) {
-    throw new Error("LoadingContext must be used within a LoadingProvider");
-  }
-
-  const { isLoading } = context;
-  return (
-    <>
-      <Loading isShow={isLoading} />
-      <ThemeProvider theme={theme}>
-        <Stack direction={"row"} gap={2}>
-          <Sidebar />
-          <Outlet />
-        </Stack>
-      </ThemeProvider>
-    </>
-  );
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    useEffect(() => {
+        if (!token) {
+            navigate("/login");
+            return;
+        } else if (user?.role !== "admin") {
+            navigate("/");
+            alert("Bạn không có quyền vào trang quản trị");
+            return;
+        }
+    }, [token, navigate]);
+    return (
+        <>
+            <Stack direction={"row"} gap={2}>
+                <Sidebar />
+                <Outlet />
+            </Stack>
+        </>
+    );
 }
 
 export default AdminLayout;

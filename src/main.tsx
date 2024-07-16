@@ -6,15 +6,11 @@ import axios from "axios";
 import { ProductsProvider } from "./contexts/ProductsContext.tsx";
 import React from "react";
 import { LoadingProvider } from "./contexts/LoadingContext.tsx";
+import configureAxios from "./configs/axios.tsx";
 
 axios.defaults.baseURL = "http://localhost:3000";
-
+configureAxios();
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    //   <React.StrictMode>
-    //     <BrowserRouter>
-    //       <App />
-    //     </BrowserRouter>
-    //   </React.StrictMode>
     <React.StrictMode>
         <ProductsProvider>
             <LoadingProvider>
