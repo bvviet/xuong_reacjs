@@ -4,8 +4,9 @@ import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { GenreFrom } from "../../types/products";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Flash from "../../components/admin/Flash/flash";
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 function EditGenre() {
   const nav = useNavigate();
@@ -15,14 +16,22 @@ function EditGenre() {
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
-
+  const context = useContext(LoadingContext);
+  // Kiểm tra nếu context là undefined để tránh lỗi
+  if (!context) {
+    throw new Error("LoadingContext must be used within a LoadingProvider");
+  }
+  const { setIsLoading } = context;
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(`/categories/${categoryId}`);
         setInitialValues(response.data);
       } catch (error) {
         console.error("Failed to fetch category:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -31,6 +40,7 @@ function EditGenre() {
 
   const onSubmit = async (values: GenreFrom) => {
     try {
+      setIsLoading(true);
       await axios.put(`/categories/${categoryId}`, values);
       setFlashSeverity("success");
       setShowFlash(true);
@@ -41,6 +51,8 @@ function EditGenre() {
       console.error(error);
       setFlashSeverity("error");
       setShowFlash(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,7 +70,7 @@ function EditGenre() {
 
   return (
     <>
-      <Container sx={{marginTop:"24px"}}>
+      <Container sx={{ marginTop: "24px" }}>
         <Flash
           isShow={showFlash}
           message={
@@ -73,7 +85,11 @@ function EditGenre() {
           gap={2}
           sx={{ justifyContent: "center", margin: "auto", maxWidth: 600 }}
         >
-          <Typography variant="h2" sx={{ fontSize: "3.5rem" }}  textAlign="center">
+          <Typography
+            variant="h2"
+            sx={{ fontSize: "3.5rem" }}
+            textAlign="center"
+          >
             Edit Category
           </Typography>
           <Form

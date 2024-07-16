@@ -17,8 +17,9 @@ import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { Category, ProductForm } from "../../types/products";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Flash from "../../components/admin/Flash/flash";
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 function AdminProductEdit() {
   const nav = useNavigate();
@@ -29,14 +30,23 @@ function AdminProductEdit() {
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
+  const context = useContext(LoadingContext);
+  // Kiểm tra nếu context là undefined để tránh lỗi
+  if (!context) {
+    throw new Error("LoadingContext must be used within a LoadingProvider");
+  }
+  const { setIsLoading } = context;
   useEffect(() => {
     // Fetch categories from the API
     const fetchCategories = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get("/categories");
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -46,10 +56,13 @@ function AdminProductEdit() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get(`/products/${productId}`);
         setInitialValues(response.data);
       } catch (error) {
         console.error("Failed to fetch product:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -58,6 +71,7 @@ function AdminProductEdit() {
 
   const onSubmit = async (values: ProductForm) => {
     try {
+      setIsLoading(true);
       await axios.put(`/products/${productId}`, values);
       setFlashSeverity("success");
       setShowFlash(true);
@@ -68,6 +82,8 @@ function AdminProductEdit() {
       console.error(error);
       setFlashSeverity("error");
       setShowFlash(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,7 +105,7 @@ function AdminProductEdit() {
 
   return (
     <>
-      <Container sx={{marginTop:"24px"}}>
+      <Container sx={{ marginTop: "24px" }}>
         <Flash
           isShow={showFlash}
           message={
@@ -104,7 +120,11 @@ function AdminProductEdit() {
           gap={2}
           sx={{ justifyContent: "center", margin: "auto", maxWidth: 600 }}
         >
-          <Typography variant="h2" sx={{ fontSize: "3.5rem" }}  textAlign="center">
+          <Typography
+            variant="h2"
+            sx={{ fontSize: "3.5rem" }}
+            textAlign="center"
+          >
             Edit Product
           </Typography>
           <Form

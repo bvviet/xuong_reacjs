@@ -12,12 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Category } from "../../types/products";
 import Flash from "../../components/admin/Flash/flash";
 import ConfirmDialogCate from "../../components/admin/confimButton/confimCate";
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 function GenreList() {
   const [showFlash, setShowFlash] = useState(false);
@@ -27,13 +28,21 @@ function GenreList() {
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
-
+  const context = useContext(LoadingContext);
+  // Kiểm tra nếu context là undefined để tránh lỗi
+  if (!context) {
+    throw new Error("LoadingContext must be used within a LoadingProvider");
+  }
+  const { setIsLoading } = context;
   const getAllCategory = async () => {
     try {
+      setIsLoading(true);
       const { data } = await axios.get("/categories");
       setCategory(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,6 +57,7 @@ function GenreList() {
 
   const handleDelete = async () => {
     try {
+      setIsLoading(true);
       await axios.delete("/categories/" + idDelete);
       setFlashSeverity("success");
       setShowFlash(true);
@@ -56,6 +66,8 @@ function GenreList() {
       setFlashSeverity("error");
       setShowFlash(true);
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const handleCloseFlash = () => {
@@ -83,7 +95,7 @@ function GenreList() {
           >
             Category List
           </Typography>
-          <Link to="/admin/add">
+          <Link to="/admin/addGenre">
             <Button variant="contained">Add Category</Button>
           </Link>
           <TableContainer component={Paper}>

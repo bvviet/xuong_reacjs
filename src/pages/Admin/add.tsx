@@ -17,8 +17,9 @@ import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
 import { useNavigate } from "react-router-dom";
 import { ProductForm, Category } from "../../types/products";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Flash from "../../components/admin/Flash/flash";
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 function AdminProductAdd() {
   const nav = useNavigate();
@@ -27,15 +28,23 @@ function AdminProductAdd() {
     "success"
   );
   const [categories, setCategories] = useState<Category[]>([]);
-
+  const context = useContext(LoadingContext);
+  // Kiểm tra nếu context là undefined để tránh lỗi
+  if (!context) {
+    throw new Error("LoadingContext must be used within a LoadingProvider");
+  }
+  const { setIsLoading } = context;
   useEffect(() => {
     // Fetch categories from the API
     const fetchCategories = async () => {
       try {
+        setIsLoading(true);
         const response = await axios.get("/categories");
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -44,6 +53,7 @@ function AdminProductAdd() {
 
   const onSubmit = async (values: ProductForm) => {
     try {
+      setIsLoading(true);
       await axios.post("/products", values);
       setFlashSeverity("success");
       setShowFlash(true);
@@ -54,6 +64,8 @@ function AdminProductAdd() {
       setFlashSeverity("error");
       console.error(error);
       setShowFlash(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 

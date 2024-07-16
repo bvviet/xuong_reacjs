@@ -4,8 +4,9 @@ import { ValidationErrors } from "final-form";
 import { Field, Form } from "react-final-form";
 import { useNavigate } from "react-router-dom";
 import { GenreFrom } from "../../types/products";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Flash from "../../components/admin/Flash/flash";
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 function AddGenre() {
   const nav = useNavigate();
@@ -13,8 +14,15 @@ function AddGenre() {
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
+  const context = useContext(LoadingContext);
+  // Kiểm tra nếu context là undefined để tránh lỗi
+  if (!context) {
+    throw new Error("LoadingContext must be used within a LoadingProvider");
+  }
+  const { setIsLoading } = context;
   const onSubmit = async (values: GenreFrom) => {
     try {
+      setIsLoading(true);
       await axios.post("/categories", values);
       setFlashSeverity("success");
       setShowFlash(true);
@@ -25,6 +33,8 @@ function AddGenre() {
       setFlashSeverity("error");
       console.error(error);
       setShowFlash(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,7 +52,7 @@ function AddGenre() {
 
   return (
     <>
-      <Container sx={{marginTop:"24px"}}>
+      <Container sx={{ marginTop: "24px" }}>
         <Flash
           isShow={showFlash}
           message={
@@ -55,7 +65,11 @@ function AddGenre() {
           gap={2}
           sx={{ justifyContent: "center", margin: "auto", maxWidth: 600 }}
         >
-          <Typography variant="h3" sx={{ fontSize: "3.5rem" }}  textAlign="center">
+          <Typography
+            variant="h3"
+            sx={{ fontSize: "3.5rem" }}
+            textAlign="center"
+          >
             Add Category
           </Typography>
           <Form
