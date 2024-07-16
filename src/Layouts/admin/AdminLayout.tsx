@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@mui/material/styles";
 import { Stack } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/admin/sideBar/sideBar";

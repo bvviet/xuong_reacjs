@@ -12,12 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { IProduct } from "../../types/products";
 import Flash from "../../components/admin/Flash/flash";
 import ConfirmDialog from "../../components/admin/confimButton/confim";
+import { LoadingContext } from "../../contexts/LoadingContext";
 
 function AdminProductList() {
   const [showFlash, setShowFlash] = useState(false);
@@ -27,13 +28,21 @@ function AdminProductList() {
   const [flashSeverity, setFlashSeverity] = useState<"success" | "error">(
     "success"
   );
-
+  const context = useContext(LoadingContext);
+  // Kiểm tra nếu context là undefined để tránh lỗi
+  if (!context) {
+    throw new Error("LoadingContext must be used within a LoadingProvider");
+  }
+  const { setIsLoading } = context;
   const getAllProduct = async () => {
     try {
+      setIsLoading(true);
       const { data } = await axios.get("/products");
       setProducts(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,6 +57,7 @@ function AdminProductList() {
 
   const handleDelete = async () => {
     try {
+      setIsLoading(true);
       await axios.delete("/products/" + idDelete);
       setFlashSeverity("success");
       setShowFlash(true);
@@ -56,6 +66,8 @@ function AdminProductList() {
       setFlashSeverity("error");
       setShowFlash(true);
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const handleCloseFlash = () => {
@@ -64,7 +76,7 @@ function AdminProductList() {
 
   return (
     <>
-      <Container>
+      <Container sx={{ marginTop: "24px" }}>
         <Flash
           isShow={showFlash}
           message={
@@ -79,7 +91,7 @@ function AdminProductList() {
           <Typography
             variant="h2"
             textAlign="center"
-            sx={{ fontSize: "2.5rem" }}
+            sx={{ fontSize: "3.5rem" }}
           >
             Product List
           </Typography>
@@ -109,7 +121,13 @@ function AdminProductList() {
                     </TableCell>
                     <TableCell align="right">{prd.price}</TableCell>
                     <TableCell align="right">{prd.description}</TableCell>
-                    <TableCell align="right">{prd.image}</TableCell>
+                    <TableCell align="right">
+                      <img
+                        src={prd.image}
+                        alt=""
+                        style={{ width: "150px", height: "100px" }}
+                      />
+                    </TableCell>
                     <TableCell align="right">
                       {prd.category ? prd.category.name : "N/A"}
                     </TableCell>
