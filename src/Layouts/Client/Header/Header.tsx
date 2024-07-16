@@ -18,8 +18,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Search from "../../../components/client/Search/Search";
 import Register from "../../../pages/Client/Register";
 import Login from "../../../pages/Client/Login";
-
-const pages = ["Products", "Pricing", "Blog"];
+import Category from "../../../components/client/Category/Category";
 
 const StyledAppBar = styled(AppBar)({
     color: "#000",
@@ -42,10 +41,6 @@ function Header() {
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        // setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
@@ -93,15 +88,7 @@ function Header() {
                     <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
                     {/* Menu */}
                     <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, marginLeft: "100px" }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: "#000", display: "block", fontSize: "1.6rem", margin: "0 20px" }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
+                        <Category />
                     </Box>
                     {/* Tìm kiếm */}
                     <Search />
@@ -148,7 +135,13 @@ function Header() {
                                         <Link to={"/profile"}>Trang cá nhân</Link>
                                         <Link to={"/account"}>Tài khoản</Link>
                                         <Link to={"/admin"}>Trang quản trị</Link>
-                                        <Link to={"#"} onClick={() => localStorage.removeItem("token")}>
+                                        <Link
+                                            to={"#"}
+                                            onClick={() => {
+                                                localStorage.removeItem("token");
+                                                localStorage.removeItem("user");
+                                            }}
+                                        >
                                             Đăng xuất
                                         </Link>
                                     </Typography>
