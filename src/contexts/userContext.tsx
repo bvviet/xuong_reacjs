@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, Dispatch, SetStateAction, useEffect } from "react";
+import { createContext, ReactNode, useState, Dispatch, SetStateAction, useEffect, useCallback } from "react";
 
 interface User {
     _id: number;
@@ -11,11 +11,13 @@ interface User {
 interface UserContextProps {
     user: User | null;
     setUser: Dispatch<SetStateAction<User | null>>;
+    fetchUser: () => void;
 }
 
 const UserContext = createContext<UserContextProps>({
     user: null,
     setUser: () => {},
+    fetchUser: () => {},
 });
 
 interface UserProviderProps {
@@ -24,15 +26,20 @@ interface UserProviderProps {
 
 const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<User | null>(null);
+    const token = localStorage.getItem("token");
 
-    useEffect(() => {
+    const fetchUser = useCallback(() => {
         const dataUser = localStorage.getItem("user");
         if (dataUser) {
             setUser(JSON.parse(dataUser));
         }
     }, []);
 
-    return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser, token]);
+
+    return <UserContext.Provider value={{ user, setUser, fetchUser }}>{children}</UserContext.Provider>;
 };
 
 export { UserProvider, UserContext };

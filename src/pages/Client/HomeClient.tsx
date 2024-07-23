@@ -8,7 +8,7 @@ import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 
 const HomeClient = () => {
     const context = useContext(ProductsContext);
-    const { products } = context;       
+    const { products } = context;
 
     return (
         <>
@@ -18,12 +18,13 @@ const HomeClient = () => {
             <Grid
                 container
                 rowSpacing={1}
-                columnSpacing={{ xs: 2, sm: 4, md: 6 }}
-                rowGap={{ xs: 2, sm: 2, md: 4 }}
+                columnSpacing={{ md: 3 }}
+                rowGap={{ md: 3 }}
+                columns={{ xs: 4, sm: 8, md: 15 }}
                 sx={{ margin: "30px 0" }}
             >
                 {products.map((product) => (
-                    <Grid item xs={3} key={product._id}>
+                    <Grid item md={3} key={product._id}>
                         <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
                             <Link to={`/detail/${product._id}`}>
                                 <img
