@@ -23,33 +23,31 @@ import Category from "../../../components/client/Category/Category";
 import { UserContext } from "../../../contexts/userContext";
 
 const StyledAppBar = styled(AppBar)({
-  color: "#000",
-  width: "100%",
-  padding: "10px 0",
-  backgroundColor: "#FFF9E5",
-  boxShadow: "none",
+    color: "#000",
+    width: "100%",
+    padding: "10px 0",
+    backgroundColor: "#FFF9E5",
+    boxShadow: "none",
 });
 
 function Header() {
-  const [openRegister, setOpenRegister] = React.useState(false);
-  const [openLogin, setOpenLogin] = React.useState(false);
-  const { user } = React.useContext(UserContext);
-  const handleOpenRegister = () => setOpenRegister(true);
-  const handleCloseRegister = () => setOpenRegister(false);
-  const handleOpenLogin = () => setOpenLogin(true);
-  const handleCloseLogin = () => setOpenLogin(false);
+    const [openRegister, setOpenRegister] = React.useState(false);
+    const [openLogin, setOpenLogin] = React.useState(false);
+    const { user, fetchUser, setUser } = React.useContext(UserContext);
+    const handleOpenRegister = () => setOpenRegister(true);
+    const handleCloseRegister = () => setOpenRegister(false);
+    const handleOpenLogin = () => setOpenLogin(true);
+    const handleCloseLogin = () => setOpenLogin(false);
 
-  const token = localStorage.getItem("token");
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+    const token = localStorage.getItem("token");
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget);
+    };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
 
   const CustomButton = styled(Button)(() => ({
     fontSize: "1.4rem",
@@ -178,6 +176,8 @@ function Header() {
                       <Link
                         to={"#"}
                         onClick={() => {
+                          fetchUser();
+                          setUser(null);
                           localStorage.removeItem("token");
                           localStorage.removeItem("user");
                           window.location.reload();
@@ -207,25 +207,21 @@ function Header() {
                 onSwitchToRegister={handleOpenRegister}
               />
 
-              <CustomButton
-                onClick={handleOpenRegister}
-                variant="contained"
-                size="large"
-              >
-                Đăng ký
-              </CustomButton>
-              <Register
-                handleOpenRegister={openRegister}
-                onCloseRegister={handleCloseRegister}
-                onSwitchToLogin={handleOpenLogin}
-                OpenLogin={handleOpenLogin}
-              />
-            </Stack>
-          )}
-        </Toolbar>
-      </Container>
-    </StyledAppBar>
-  );
+                            <CustomButton onClick={handleOpenRegister} variant="contained" size="large">
+                                Đăng ký
+                            </CustomButton>
+                            <Register
+                                handleOpenRegister={openRegister}
+                                onCloseRegister={handleCloseRegister}
+                                onSwitchToLogin={handleOpenLogin}
+                                OpenLogin={handleOpenLogin}
+                            />
+                        </Stack>
+                    )}
+                </Toolbar>
+            </Container>
+        </StyledAppBar>
+    );
 }
 
 export default Header;
