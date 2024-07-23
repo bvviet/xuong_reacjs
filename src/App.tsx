@@ -12,55 +12,60 @@ import DetailClient from "./pages/Client/DetailClient";
 import GenreList from "./pages/AdminGenre/listGenre";
 import AddGenre from "./pages/AdminGenre/addGenre";
 import EditGenre from "./pages/AdminGenre/editGenre";
+import Cart from "./pages/Client/Cart";
 
 export const routers = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: <ClientLayout />,
+    children: [
+      {
         path: "/",
-        element: <ClientLayout />,
+        element: <HomeClient />,
+      },
+      {
+        path: "/detail/:id",
+        element: <DetailClient />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    children: [
+      {
+        path: "",
+        element: <AdminLayout />,
         children: [
-            {
-                path: "/",
-                element: <HomeClient />,
-            },
-            {
-                path: "/detail/:id",
-                element: <DetailClient />,
-            },
+          {
+            path: "list",
+            element: <AdminProductList />,
+          },
+          {
+            path: "add",
+            element: <AdminProductAdd />,
+          },
+          {
+            path: "edit/:productId",
+            element: <AdminProductEdit />,
+          },
+          {
+            path: "listGenre",
+            element: <GenreList />,
+          },
+          {
+            path: "addGenre",
+            element: <AddGenre />,
+          },
+          {
+            path: "editGenre/:categoryId",
+            element: <EditGenre />,
+          },
         ],
-    },
-    {
-        path: "/admin",
-        children: [
-            {
-                path: "",
-                element: <AdminLayout />,
-                children: [
-                    {
-                        path: "list",
-                        element: <AdminProductList />,
-                    },
-                    {
-                        path: "add",
-                        element: <AdminProductAdd />,
-                    },
-                    {
-                        path: "edit/:productId",
-                        element: <AdminProductEdit />,
-                    },
-                    {
-                        path: "listGenre",
-                        element: <GenreList />,
-                    },
-                    {
-                        path: "addGenre",
-                        element: <AddGenre />,
-                    },
-                    {
-                        path: "editGenre/:categoryId",
-                        element: <EditGenre />,
-                    },
-                ],
-            },
-        ],
-    },
+      },
+    ],
+  },
 ]);

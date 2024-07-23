@@ -1,7 +1,7 @@
 import * as React from "react";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
-import { Stack } from "@mui/material";
+import { Badge, Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import Search from "../../../components/client/Search/Search";
 import Register from "../../../pages/Client/Register";
@@ -103,72 +104,92 @@ function Header() {
           <Search />
           {/* Avatar */}
           {token && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip sx={{ fontSize: "1.6rem" }} title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt="Viet"
-                    src="https://vov.vn/sites/default/files/styles/large/public/2021-08/CR7%202.jpg"
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "50px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+            <>
+              <IconButton
+                component={Link}
+                to="/cart"
+                color="inherit"
+                sx={{ marginRight: 2, fontSize: "3rem" }}
               >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "flex-start",
-                      fontSize: "1.6rem",
-                      gap: "20px",
-                      width: "200px",
-                      padding: "10px",
-                    }}
-                    textAlign="center"
-                  >
-                    <Link
-                      to={"#"}
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      {" "}
-                      Xin chào:
-                      <Typography
-                        sx={{ fontWeight: "600", fontSize: "18px", pl: "8px" }}
-                      >
-                        {user?.username}
-                      </Typography>{" "}
-                    </Link>
-                    <Link to={"/profile"}>Trang cá nhân</Link>
-                    <Link to={"/account"}>Tài khoản</Link>
-                    <Link to={"/admin"}>Trang quản trị</Link>
-                    <Link
-                      to={"#"}
-                      onClick={() => {
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("user");
+                {" "}
+                <Badge color="primary" badgeContent={100} max={99}>
+                  <ShoppingCartIcon sx={{ fontSize: "inherit" }} />
+                </Badge>
+              </IconButton>
+
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip sx={{ fontSize: "1.6rem" }} title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Viet"
+                      src="https://vov.vn/sites/default/files/styles/large/public/2021-08/CR7%202.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+
+                <Menu
+                  sx={{ mt: "50px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        fontSize: "1.6rem",
+                        gap: "20px",
+                        width: "200px",
+                        padding: "10px",
                       }}
+                      textAlign="center"
                     >
-                      Đăng xuất
-                    </Link>
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
+                      <Link
+                        to={"#"}
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        {" "}
+                        Xin chào:
+                        <Typography
+                          sx={{
+                            fontWeight: "600",
+                            fontSize: "18px",
+                            pl: "8px",
+                          }}
+                        >
+                          {user?.username}
+                        </Typography>{" "}
+                      </Link>
+                      <Link to={"/profile"}>Trang cá nhân</Link>
+                      <Link to={"/account"}>Tài khoản</Link>
+                      <Link to={"/admin"}>Trang quản trị</Link>
+                      <Link
+                        to={"#"}
+                        onClick={() => {
+                          localStorage.removeItem("token");
+                          localStorage.removeItem("user");
+                          window.location.reload();
+                        }}
+                      >
+                        Đăng xuất
+                      </Link>
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </>
           )}
           {/* Đăng ký đăng nhập */}
           {!token && (
