@@ -21,20 +21,19 @@ const Comment = () => {
         setOpen(false);
     };
 
-    // Lấy bình luận theo sản phẩm
-    useEffect(() => {
-        const fetchComment = async () => {
-            try {
-                const res = await axios.get(`http://localhost:3000/comment/${id}`);
-                setComments(res.data.data);
-                fetchUser();
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const fetchComment = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3000/comment/${id}`);
+            setComments(res.data.data);
+            fetchUser();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
+    useEffect(() => {
         fetchComment();
-    }, [id, comments, fetchUser]);
+    }, [id, fetchUser]);
 
     return (
         <>
@@ -50,7 +49,7 @@ const Comment = () => {
                 <Button sx={{ fontSize: "1.2rem" }} variant="outlined" onClick={handleClickOpen}>
                     Gửi đánh giá của bạn
                 </Button>
-                <AddComment handleClose={handleClose} open={open} />
+                <AddComment handleClose={handleClose} open={open} fetchComment={fetchComment} />
             </div>
             <Grid container spacing={3}>
                 {comments.map((item) => (
@@ -65,7 +64,7 @@ const Comment = () => {
                         >
                             {user?._id !== undefined && item.userId._id === user._id.toString() && (
                                 <>
-                                    <DeleteComment commentId={item._id} />
+                                    <DeleteComment commentId={item._id} fetchComment={fetchComment} />
                                     <Tooltip title="Chỉnh sửa" sx={{ position: "absolute", top: 5, right: 40 }}>
                                         <IconButton>
                                             <CreateIcon sx={{ fontSize: "2rem" }} />

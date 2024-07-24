@@ -10,24 +10,27 @@ import configureAxios from "./configs/axios.tsx";
 import { UserProvider } from "./contexts/userContext.tsx";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import { FavoriteProvider } from "./contexts/favoriteContext.tsx";
 
 axios.defaults.baseURL = "http://localhost:3000";
 configureAxios();
 const theme = createTheme({
-  typography: {
-    fontFamily: "Roboto, Arial, sans-serif",
-  },
+    typography: {
+        fontFamily: "Roboto, Arial, sans-serif",
+    },
 });
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <UserProvider>
-      <ProductsProvider>
-        <LoadingProvider>
-          <ThemeProvider theme={theme}>
-            <RouterProvider router={routers} />
-          </ThemeProvider>
-        </LoadingProvider>
-      </ProductsProvider>
-    </UserProvider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <UserProvider>
+            <ProductsProvider>
+                <LoadingProvider>
+                    <FavoriteProvider>
+                        <ThemeProvider theme={theme}>
+                            <RouterProvider router={routers} />
+                        </ThemeProvider>
+                    </FavoriteProvider>
+                </LoadingProvider>
+            </ProductsProvider>
+        </UserProvider>
+    </React.StrictMode>
 );

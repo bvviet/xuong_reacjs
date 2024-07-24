@@ -16,6 +16,7 @@ import { LoadingContext } from "../../../contexts/LoadingContext";
 interface AddCommentProps {
     open: boolean;
     handleClose: () => void;
+    fetchComment: () => void;
 }
 
 interface IFormInput {
@@ -23,7 +24,7 @@ interface IFormInput {
     rating: number;
 }
 
-const AddComment: React.FC<AddCommentProps> = ({ handleClose, open }) => {
+const AddComment: React.FC<AddCommentProps> = ({ handleClose, open, fetchComment }) => {
     const { user } = useContext(UserContext);
     const { id } = useParams();
     const { setIsLoading } = useContext(LoadingContext) || {};
@@ -49,7 +50,8 @@ const AddComment: React.FC<AddCommentProps> = ({ handleClose, open }) => {
 
             if (res.status === 200) {
                 handleClose();
-                reset(); // <-- Reset form sau khi gửi thành công
+                reset();
+                fetchComment();
                 toast.success("Thêm bình luận thành công", {
                     position: "top-right",
                     autoClose: 2000,
