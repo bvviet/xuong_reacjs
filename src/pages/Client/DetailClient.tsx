@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from "react";
 import { IProduct } from "../../types/products";
 import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 import Comment from "../../components/client/Comment";
+import AddFavorite from "./Favorite/AddFavorite";
 
 // Tạo styled component cho thẻ ul
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,7 +28,8 @@ const UlCustom = styled("ul")(({ theme }) => ({
 
 const DetailClient = () => {
     const [product, setProduct] = useState<IProduct | undefined>(undefined);
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string | undefined }>();
+
     const context = useContext(ProductsContext);
     const { products } = context;
     const [currentTab, setCurrentTab] = useState("description");
@@ -82,6 +84,8 @@ const DetailClient = () => {
                         <Button variant="contained" endIcon={<ShoppingCartIcon />} sx={{ background: "#FF5B26" }}>
                             Mua ngay
                         </Button>
+
+                        <AddFavorite productId={id!} />
                     </Stack>
 
                     <Stack
