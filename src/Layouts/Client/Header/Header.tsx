@@ -21,6 +21,7 @@ import Register from "../../../pages/Client/Register";
 import Login from "../../../pages/Client/Login";
 import Category from "../../../components/client/Category/Category";
 import { UserContext } from "../../../contexts/userContext";
+import { useCart } from "../../../contexts/CartContext";
 
 const StyledAppBar = styled(AppBar)({
   color: "#000",
@@ -50,6 +51,9 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const { cart } = useCart();
+  console.log(cart);
 
   const CustomButton = styled(Button)(() => ({
     fontSize: "1.4rem",
@@ -112,7 +116,7 @@ function Header() {
                 sx={{ marginRight: 2, fontSize: "3rem" }}
               >
                 {" "}
-                <Badge color="primary" badgeContent={100} max={99}>
+                <Badge color="primary" badgeContent={cart} max={99}>
                   <ShoppingCartIcon sx={{ fontSize: "inherit" }} />
                 </Badge>
               </IconButton>
