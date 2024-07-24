@@ -28,10 +28,10 @@ import phone from "../../assets/icons/phone.svg";
 
 import Comment from "../../components/client/Comment";
 import AddFavorite from "./Favorite/AddFavorite";
+import { UserContext } from "../../contexts/userContext";
 
 // Tạo styled component cho thẻ ul
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UlCustom = styled("ul")(({ theme }) => ({
+const UlCustom = styled("ul")(() => ({
     display: "flex",
     alignItems: "center",
     gap: "50px",
@@ -47,7 +47,7 @@ const DetailClient = () => {
     const [product, setProduct] = useState<IProduct | undefined>(undefined);
     const { id } = useParams<{ id: string | undefined }>();
     const [currentTab, setCurrentTab] = useState("description");
-
+    const { user } = useContext(UserContext);
     const context = useContext(ProductsContext);
     const { products } = context;
     const [quantity, setQuantity] = useState(1);
@@ -63,7 +63,7 @@ const DetailClient = () => {
     const { setCart } = useCart();
 
     const handleAddToCart = (product: ProductCart) => {
-        if (quantity <= 0) return;
+        if (quantity <= 0 || !user) return;
 
         // Tạo đối tượng sản phẩm chỉ với các thuộc tính cần thiết
         const productToSave: ProductCart = {
@@ -74,8 +74,9 @@ const DetailClient = () => {
             category: product.category,
         };
 
+        const cartKey = `cart_${user._id}`;
         // Lấy dữ liệu giỏ hàng từ Local Storage
-        const cartStorage = localStorage.getItem("carts") || "[]";
+        const cartStorage = localStorage.getItem(cartKey) || "[]";
         const carts = JSON.parse(cartStorage);
 
         // Tìm sản phẩm trong giỏ hàng
@@ -90,12 +91,13 @@ const DetailClient = () => {
         }
 
         // Lưu giỏ hàng vào Local Storage
-        localStorage.setItem("carts", JSON.stringify(carts));
+        localStorage.setItem(cartKey, JSON.stringify(carts));
         console.log(carts);
 
         // Cập nhật trạng thái giỏ hàng
         setCart(carts.length);
     };
+
     useEffect(() => {
         const fetchDetail = async () => {
             try {
@@ -109,6 +111,7 @@ const DetailClient = () => {
         };
         fetchDetail();
     }, [id]);
+
     return (
         <>
             <Stack direction="row" spacing={8} sx={{ margin: "130px 0" }}>
