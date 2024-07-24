@@ -26,7 +26,6 @@ import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 import { useCart } from "../../contexts/CartContext";
 import phone from "../../assets/icons/phone.svg";
 
-
 import Comment from "../../components/client/Comment";
 import AddFavorite from "./Favorite/AddFavorite";
 
@@ -47,6 +46,7 @@ const UlCustom = styled("ul")(({ theme }) => ({
 const DetailClient = () => {
     const [product, setProduct] = useState<IProduct | undefined>(undefined);
     const { id } = useParams<{ id: string | undefined }>();
+    const [currentTab, setCurrentTab] = useState("description");
 
     const context = useContext(ProductsContext);
     const { products } = context;
@@ -71,7 +71,7 @@ const DetailClient = () => {
             _id: product._id,
             price: product.price,
             image: product.image,
-            category: product.category
+            category: product.category,
         };
 
         // Lấy dữ liệu giỏ hàng từ Local Storage
@@ -79,9 +79,7 @@ const DetailClient = () => {
         const carts = JSON.parse(cartStorage);
 
         // Tìm sản phẩm trong giỏ hàng
-        const findItem = carts.findIndex(
-            (item: CartItem) => item.product._id === productToSave._id
-        );
+        const findItem = carts.findIndex((item: CartItem) => item.product._id === productToSave._id);
 
         // Cập nhật số lượng sản phẩm
         if (findItem !== -1) {
@@ -90,9 +88,6 @@ const DetailClient = () => {
             const newCartItem: CartItem = { product: productToSave, quantity };
             carts.push(newCartItem);
         }
-
-    const [currentTab, setCurrentTab] = useState("description");
-
 
         // Lưu giỏ hàng vào Local Storage
         localStorage.setItem("carts", JSON.stringify(carts));
@@ -105,9 +100,7 @@ const DetailClient = () => {
         const fetchDetail = async () => {
             try {
                 if (id) {
-                    const response = await axios.get(
-                        `http://localhost:3000/products/${id}`
-                    );
+                    const response = await axios.get(`http://localhost:3000/products/${id}`);
                     setProduct(response.data);
                 }
             } catch (error) {
@@ -133,12 +126,8 @@ const DetailClient = () => {
                     />
                 </Box>
                 <Box>
-                    <Typography sx={{ fontSize: "1.4rem", color: "#288ad6" }}>
-                        {product?.category.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1.8rem", padding: "10px 0" }}>
-                        {product?.name}
-                    </Typography>
+                    <Typography sx={{ fontSize: "1.4rem", color: "#288ad6" }}>{product?.category.name}</Typography>
+                    <Typography sx={{ fontSize: "1.8rem", padding: "10px 0" }}>{product?.name}</Typography>
                     <Rating
                         name="half-rating-read"
                         defaultValue={2.5}
@@ -147,9 +136,7 @@ const DetailClient = () => {
                         size="large"
                         sx={{ marginTop: "10px" }}
                     />
-                    <Typography
-                        sx={{ fontSize: "1.8rem", padding: "10px 0", fontWeight: "700" }}
-                    >
+                    <Typography sx={{ fontSize: "1.8rem", padding: "10px 0", fontWeight: "700" }}>
                         <FormatPrice price={product?.price} />
                     </Typography>
                     <Grid
@@ -206,17 +193,10 @@ const DetailClient = () => {
                     </Grid>
 
                     <Stack direction="row" spacing={3}>
-                        <Button
-                            variant="outlined"
-                            onClick={() => product && handleAddToCart(product)}
-                        >
+                        <Button variant="outlined" onClick={() => product && handleAddToCart(product)}>
                             Thêm vào giỏ hàng
                         </Button>
-                        <Button
-                            variant="contained"
-                            endIcon={<ShoppingCartIcon />}
-                            sx={{ background: "#FF5B26" }}
-                        >
+                        <Button variant="contained" endIcon={<ShoppingCartIcon />} sx={{ background: "#FF5B26" }}>
                             Mua ngay
                         </Button>
 
@@ -306,9 +286,7 @@ const DetailClient = () => {
             >
                 {products.map((value) => (
                     <Grid item xs={3} key={value._id}>
-                        <Card
-                            sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}
-                        >
+                        <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
                             <Link to={`/detail/${value._id}`}>
                                 <img
                                     style={{ height: 140, width: "100%", objectFit: "cover" }}
@@ -328,9 +306,7 @@ const DetailClient = () => {
                                     >
                                         {value.name}
                                     </Typography>
-                                    <Typography
-                                        sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}
-                                    >
+                                    <Typography sx={{ color: "red", fontSize: "1.6rem", fontWeight: "500" }}>
                                         <FormatPrice price={value.price} />
                                     </Typography>
                                 </CardContent>
@@ -350,12 +326,7 @@ const DetailClient = () => {
                                         padding: "0",
                                     }}
                                 >
-                                    <Rating
-                                        name="read-only"
-                                        value={3.5}
-                                        precision={0.1}
-                                        readOnly
-                                    />
+                                    <Rating name="read-only" value={3.5} precision={0.1} readOnly />
                                     <Button sx={{ fontSize: "1.1rem" }}>Add to card</Button>
                                 </CardActions>
                             </Box>
