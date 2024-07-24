@@ -13,7 +13,7 @@ export type IProduct = {
 export type Category = {
   _id: string;
   name: string;
-  description: string;
+
 };
 
 export type ProductForm = {
@@ -31,4 +31,15 @@ export type GenreFrom = {
 export type LoaderData = {
   product: IProduct[];
   cate: Category[];
+};
+export type ProductCart = {
+  name: string;
+  _id: string;
+  price: number;
+  image: string;
+  category: Category;
+}
+export type CartItem = {
+  product: ProductCart;
+  quantity: number;
 };

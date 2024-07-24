@@ -21,6 +21,7 @@ import Register from "../../../pages/Client/Register";
 import Login from "../../../pages/Client/Login";
 import Category from "../../../components/client/Category/Category";
 import { UserContext } from "../../../contexts/userContext";
+import { useCart } from "../../../contexts/CartContext";
 import FavoriteDialog from "../../../pages/Client/Favorite/Favorites";
 
 const StyledAppBar = styled(AppBar)({
@@ -49,7 +50,8 @@ function Header() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-
+     const { cart } = useCart();
+  console.log(cart);
     const CustomButton = styled(Button)(() => ({
         fontSize: "1.4rem",
         color: "#191B1D",
