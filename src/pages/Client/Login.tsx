@@ -10,60 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { LoadingContext } from "../../contexts/LoadingContext";
-
-const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "540px",
-    height: "660px",
-    background: "#ecf5fe",
-    boxShadow: 24,
-    p: 4,
-    borderRadius: "16px",
-    animationDuration: ".3s",
-    overflowY: "auto",
-};
-
-const CustomTextField = styled(TextField)`
-    && {
-        & .MuiInputLabel-root {
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #000;
-        }
-        & .MuiOutlinedInput-root {
-            border-radius: 44px;
-            width: 370px;
-            background-color: #fff;
-        }
-        & label.Mui-focused {
-            color: #1dbfaf;
-        }
-        & .MuiInput-underline:after {
-            border-bottom-color: #1dbfaf;
-        }
-        & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-            border-color: #1dbfaf;
-        }
-        & .MuiInputBase-input {
-            font-size: 1.6rem;
-            padding: 15px;
-            height: auto;
-            width: 100%;
-        }
-        & .MuiFormHelperText-root {
-            /*helperText */
-            margin-top: 9px;
-            font-size: 1.4rem;
-            color: #f33a58;
-            margin-left: 8px;
-            font-weight: 500;
-            line-height: 1.5;
-        }
-    }
-`;
+import { UserContext } from "../../contexts/userContext";
 
 interface LoginProps {
     handleOpenLogin: boolean;
@@ -77,6 +24,7 @@ interface IFormInput {
 }
 
 const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchToRegister }) => {
+    const { fetchUser } = useContext(UserContext);
     const [messages, setMessages] = useState("");
     const context = useContext(LoadingContext);
     // Kiểm tra nếu context là undefined để tránh lỗi
@@ -111,6 +59,7 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
                 const response = await axios.post("http://localhost:3000/auth/login", data);
                 console.log(response.data.user);
                 if (response.status === 200) {
+                    fetchUser();
                     toast.success("Đăng nhập thành công!", {
                         position: "top-right",
                         autoClose: 1500,
@@ -279,3 +228,57 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
 };
 
 export default Login;
+
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "540px",
+    height: "660px",
+    background: "#ecf5fe",
+    boxShadow: 24,
+    p: 4,
+    borderRadius: "16px",
+    animationDuration: ".3s",
+    overflowY: "auto",
+};
+
+const CustomTextField = styled(TextField)`
+    && {
+        & .MuiInputLabel-root {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #000;
+        }
+        & .MuiOutlinedInput-root {
+            border-radius: 44px;
+            width: 370px;
+            background-color: #fff;
+        }
+        & label.Mui-focused {
+            color: #1dbfaf;
+        }
+        & .MuiInput-underline:after {
+            border-bottom-color: #1dbfaf;
+        }
+        & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+            border-color: #1dbfaf;
+        }
+        & .MuiInputBase-input {
+            font-size: 1.6rem;
+            padding: 15px;
+            height: auto;
+            width: 100%;
+        }
+        & .MuiFormHelperText-root {
+            /*helperText */
+            margin-top: 9px;
+            font-size: 1.4rem;
+            color: #f33a58;
+            margin-left: 8px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+    }
+`;

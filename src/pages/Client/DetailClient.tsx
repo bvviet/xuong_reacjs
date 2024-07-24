@@ -14,8 +14,10 @@ import {
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { styled } from "@mui/system";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
@@ -25,10 +27,27 @@ import { useCart } from "../../contexts/CartContext";
 import phone from "../../assets/icons/phone.svg";
 
 
+import Comment from "../../components/client/Comment";
+import AddFavorite from "./Favorite/AddFavorite";
+
+// Tạo styled component cho thẻ ul
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const UlCustom = styled("ul")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    gap: "50px",
+    background: "#f0f0f0",
+    padding: "15px 40px",
+    "& li": {
+        cursor: "pointer",
+        padding: "8px 16px",
+    },
+}));
 
 const DetailClient = () => {
     const [product, setProduct] = useState<IProduct | undefined>(undefined);
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string | undefined }>();
+
     const context = useContext(ProductsContext);
     const { products } = context;
     const [quantity, setQuantity] = useState(1);
@@ -71,6 +90,9 @@ const DetailClient = () => {
             const newCartItem: CartItem = { product: productToSave, quantity };
             carts.push(newCartItem);
         }
+
+    const [currentTab, setCurrentTab] = useState("description");
+
 
         // Lưu giỏ hàng vào Local Storage
         localStorage.setItem("carts", JSON.stringify(carts));
@@ -197,6 +219,8 @@ const DetailClient = () => {
                         >
                             Mua ngay
                         </Button>
+
+                        <AddFavorite productId={id!} />
                     </Stack>
 
                     <Stack
@@ -238,6 +262,41 @@ const DetailClient = () => {
                 </Box>
             </Stack>
 
+            {/* Bình luận và mô tả */}
+            <Stack direction="row" spacing={8}></Stack>
+            <Box>
+                <UlCustom>
+                    <li
+                        style={{ background: currentTab === "description" ? "#fff" : "" }}
+                        onClick={() => setCurrentTab("description")}
+                    >
+                        Mô tả
+                    </li>
+                    <li
+                        style={{ background: currentTab === "comments" ? "#fff" : "" }}
+                        onClick={() => setCurrentTab("comments")}
+                    >
+                        Bình luận
+                    </li>
+                </UlCustom>
+            </Box>
+            <Box sx={{ margin: "10px 0" }}>
+                {currentTab === "description" && (
+                    <div>
+                        <Typography variant="h5" sx={{ fontWeight: "500" }}>
+                            Mô tả sản phẩm
+                        </Typography>
+                        <Typography sx={{ fontSize: "1.4rem" }}>{product?.description}</Typography>
+                    </div>
+                )}
+                {currentTab === "comments" && (
+                    <div>
+                        <Comment />
+                    </div>
+                )}
+            </Box>
+
+            {/* Tất cả sản phẩm */}
             <Grid
                 container
                 rowSpacing={1}

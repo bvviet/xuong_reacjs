@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Header from "./Header/Header";
 import { Container } from "@mui/material";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../components/client/Loading/Loading";
 import { LoadingContext } from "../../contexts/LoadingContext";
 import { useContext } from "react";
