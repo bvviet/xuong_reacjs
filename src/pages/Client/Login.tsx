@@ -57,38 +57,30 @@ const Login: React.FC<LoginProps> = ({ handleOpenLogin, onCloseLogin, onSwitchTo
             try {
                 setIsLoading(true);
                 const response = await axios.post("http://localhost:3000/auth/login", data);
-                console.log(response.data.user);
                 if (response.status === 200) {
-                    fetchUser();
+                    localStorage.setItem("token", response.data.token);
+                    localStorage.setItem("user", JSON.stringify(response.data.user));
+                    fetchUser(); // Cập nhật thông tin người dùng trong context
                     toast.success("Đăng nhập thành công!", {
                         position: "top-right",
                         autoClose: 1500,
                     });
-                    localStorage.setItem("token", response.data.token);
-                    localStorage.setItem("user", JSON.stringify(response.data.user));
                     setTimeout(() => {
                         onCloseLogin();
-                    }, 2500);
+                    }, 1500); // Thay đổi thời gian tạm dừng
                 }
-            } catch (error: unknown) {
-                let errorMessage = "";
+            } catch (error) {
+                let errorMessage = "Đã xảy ra lỗi. Vui lòng thử lại!";
                 if (axios.isAxiosError(error)) {
                     if (error.response) {
-                        errorMessage = `${error.response.data.message}`;
-                        if (error.response?.status == 404) {
-                            errorMessage = "API hiện đang bị lỗi";
-                        }
+                        errorMessage = error.response.data.message || errorMessage;
                     } else if (error.request) {
                         errorMessage = "Vui lòng kiểm tra lại mạng!";
                     } else if (error.message === "Network Error") {
                         errorMessage = "Vui lòng kiểm tra lại kết nối mạng!";
-                    } else {
-                        errorMessage = `Lỗi khác từ Axios xảy ra:${error.message}`;
                     }
-                    setMessages(errorMessage);
-                } else {
-                    console.log("Lỗi khác xảy ra:", (error as Error).message);
                 }
+                setMessages(errorMessage);
             } finally {
                 setIsLoading(false);
             }
