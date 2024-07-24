@@ -21,6 +21,7 @@ import axios from "axios";
 import { UserContext } from "../../../contexts/userContext";
 import { toast } from "react-toastify";
 import { LoadingContext } from "../../../contexts/LoadingContext";
+import { Link } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement },
@@ -104,27 +105,29 @@ const FavoriteDialog = () => {
                     {context?.favorites?.map((item) => (
                         <React.Fragment key={item.productId._id}>
                             <ListItemButton>
-                                <Stack direction={"row"} spacing={3} alignItems={"center"}>
-                                    <img
-                                        style={{ width: "50px", borderRadius: "10px" }}
-                                        src={`${item.productId.image}`}
-                                        alt={`${item.productId.name}`}
-                                    />
-                                    <ListItemText
-                                        primary={`${item.productId.name}`}
-                                        secondary={<FormatPrice price={item.productId.price} />}
-                                        primaryTypographyProps={{
-                                            sx: { fontSize: "1.5rem", fontWeight: "500", color: "#1A162E" },
-                                        }}
-                                        secondaryTypographyProps={{ sx: { fontSize: "1.2rem" } }}
-                                    />
-                                    <ConfirmDelete
-                                        title="Bạn chắn chắn muốn xóa khỏi danh sách yêu thích chứ❓"
-                                        handleDelete={() => handleDeleteFavorite(item.productId._id)}
-                                    >
-                                        <DeleteIcon sx={{ fontSize: "2rem" }} />
-                                    </ConfirmDelete>
-                                </Stack>
+                                <Link to={`/detail/${item.productId._id}`}>
+                                    <Stack direction={"row"} spacing={3} alignItems={"center"}>
+                                        <img
+                                            style={{ width: "50px", borderRadius: "10px" }}
+                                            src={`${item.productId.image}`}
+                                            alt={`${item.productId.name}`}
+                                        />
+                                        <ListItemText
+                                            primary={`${item.productId.name}`}
+                                            secondary={<FormatPrice price={item.productId.price} />}
+                                            primaryTypographyProps={{
+                                                sx: { fontSize: "1.5rem", fontWeight: "500", color: "#1A162E" },
+                                            }}
+                                            secondaryTypographyProps={{ sx: { fontSize: "1.2rem" } }}
+                                        />
+                                        <ConfirmDelete
+                                            title="Bạn chắn chắn muốn xóa khỏi danh sách yêu thích chứ❓"
+                                            handleDelete={() => handleDeleteFavorite(item.productId._id)}
+                                        >
+                                            <DeleteIcon sx={{ fontSize: "2rem" }} />
+                                        </ConfirmDelete>
+                                    </Stack>
+                                </Link>
                             </ListItemButton>
                             <Divider />
                         </React.Fragment>
