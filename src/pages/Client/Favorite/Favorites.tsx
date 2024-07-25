@@ -97,7 +97,7 @@ const FavoriteDialog = () => {
                             <CloseIcon sx={{ fontSize: "2rem" }} />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1, fontSize: "1.3rem" }} variant="h6" component="div">
-                            Danh sách sản phẩm yêu thích của Thiago Silva
+                            Danh sách sản phẩm yêu thích của {user?.username}
                         </Typography>
                     </Toolbar>
                 </AppBar>

@@ -9,6 +9,8 @@ import { useContext } from "react";
 import { CartProvider } from "../../contexts/CartContext";
 import Footer from "./Footer/Footer";
 import About from "../../components/client/About/About";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "../../components/admin/theme/theme";
 
 const ClientLayout = () => {
     const context = useContext(LoadingContext);
@@ -26,12 +28,15 @@ const ClientLayout = () => {
                 <Header />
                 <Container maxWidth="xl" sx={{ marginTop: "75px" }}>
                     <ToastContainer />
+                    <ThemeProvider theme={theme}>
                     <Outlet />
+                    </ThemeProvider>
                 </Container>
                 <About />
                 <Footer />
             </CartProvider>
         </div>
     );
+
 };
 export default ClientLayout;

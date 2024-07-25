@@ -13,6 +13,7 @@ import GenreList from "./pages/AdminGenre/listGenre";
 import AddGenre from "./pages/AdminGenre/addGenre";
 import EditGenre from "./pages/AdminGenre/editGenre";
 import Cart from "./pages/Client/Cart";
+import Checkout from "./pages/Client/Checkout";
 
 export const routers = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const routers = createBrowserRouter([
         path: "/cart",
         element: <Cart />,
       },
+      {
+        path: "/checkout",
+        element: <Checkout />
+      }
     ],
   },
   {
