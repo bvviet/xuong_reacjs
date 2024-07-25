@@ -5,6 +5,11 @@ import tea from "../../../assets/images/tea.png";
 import coffee from "../../../assets/images/cafee.png";
 import thuocLa from "../../../assets/images/thuocla.png";
 import dep from "../../../assets/images/dep.png";
+import cr7 from "../../../assets/images/cr7.png";
+import cr74 from "../../../assets/images/cr74.png";
+// import cr7_3 from "../../../assets/images/cr7_3.png";
+import thiagoSilval from "../../../assets/images/thiagoSilval.png";
+import thiago2 from "../../../assets/images/thiago2.png";
 
 const About = () => {
     return (
@@ -33,6 +38,11 @@ const About = () => {
                     </div>
                 </div>
             </div>
+
+            <img src={cr7} alt="" />
+            <img src={thiagoSilval} alt="" />
+            <img src={cr74} alt="" />
+            <img src={thiago2} width={"370px"} style={{marginLeft:"45px"}} alt="" />
 
             <div className="about__main">
                 <div className="about__left">
