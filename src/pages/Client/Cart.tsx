@@ -23,6 +23,7 @@ import { CartItem } from "../../types/products";
 import { LoadingContext } from "../../contexts/LoadingContext";
 import { UserContext } from "../../contexts/userContext";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled(Stack)({
   width: 900,
@@ -294,9 +295,11 @@ export default function Cart() {
                 backgroundColor: "#FF5B26",
               }}
             >
-              <Typography variant="h6" component="p" color="white" py={1} px={4}>
-                Thanh toán
-              </Typography>
+              <Link to={"/checkout"}>
+                <Typography variant="h6" component="p" color="white" py={1} px={4}>
+                  Thanh toán
+                </Typography>
+              </Link>
             </Button>
           </Box>
         </Box>
