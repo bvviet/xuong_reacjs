@@ -6,16 +6,19 @@ import axios from "axios";
 import { FavoriteContext } from "../../../contexts/favoriteContext";
 import { toast } from "react-toastify";
 import { LoadingContext } from "../../../contexts/LoadingContext";
-
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 interface AddFavoriteProps {
     productId: string;
 }
 
 const AddFavorite: React.FC<AddFavoriteProps> = ({ productId }) => {
+    const favoriteContext = useContext(FavoriteContext);
     const { user } = useContext(UserContext);
     const context = useContext(FavoriteContext);
     const loadingContext = useContext(LoadingContext);
     const [messages, setMessages] = useState("");
+    console.log(favoriteContext?.favorites);
+
     useEffect(() => {
         if (messages) {
             toast.error(messages, {
@@ -66,7 +69,11 @@ const AddFavorite: React.FC<AddFavoriteProps> = ({ productId }) => {
     return (
         <IconButton onClick={handleAddFavorite} color="inherit" sx={{ marginRight: 2, fontSize: "3rem" }}>
             <Badge color="primary">
-                <FavoriteIcon color="secondary" sx={{ fontSize: "inherit" }} />
+                {favoriteContext?.favorites?.some((item) => item.productId._id === productId) ? (
+                    <FavoriteIcon color="secondary" sx={{ fontSize: "inherit" }} />
+                ) : (
+                    <FavoriteBorderIcon sx={{ fontSize: "inherit" }} />
+                )}
             </Badge>
         </IconButton>
     );

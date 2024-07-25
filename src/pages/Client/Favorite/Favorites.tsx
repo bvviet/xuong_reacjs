@@ -105,10 +105,10 @@ const FavoriteDialog = () => {
                     {context?.favorites?.map((item) => (
                         <React.Fragment key={item.productId._id}>
                             <ListItemButton>
-                                <Link to={`/detail/${item.productId._id}`}>
-                                    <Stack direction={"row"} spacing={3} alignItems={"center"}>
+                                <Stack direction={"row"} spacing={3} alignItems={"center"}>
+                                    <Link to={`/detail/${item.productId._id}`} style={{ display: "flex", gap: "20px" }}>
                                         <img
-                                            style={{ width: "50px", borderRadius: "10px" }}
+                                            style={{ width: "50px", borderRadius: "10px", objectFit: "contain" }}
                                             src={`${item.productId.image}`}
                                             alt={`${item.productId.name}`}
                                         />
@@ -120,14 +120,14 @@ const FavoriteDialog = () => {
                                             }}
                                             secondaryTypographyProps={{ sx: { fontSize: "1.2rem" } }}
                                         />
-                                        <ConfirmDelete
-                                            title="Bạn chắn chắn muốn xóa khỏi danh sách yêu thích chứ❓"
-                                            handleDelete={() => handleDeleteFavorite(item.productId._id)}
-                                        >
-                                            <DeleteIcon sx={{ fontSize: "2rem" }} />
-                                        </ConfirmDelete>
-                                    </Stack>
-                                </Link>
+                                    </Link>
+                                    <ConfirmDelete
+                                        title="Bạn chắn chắn muốn xóa khỏi danh sách yêu thích chứ❓"
+                                        handleDelete={() => handleDeleteFavorite(item.productId._id)}
+                                    >
+                                        <DeleteIcon sx={{ fontSize: "2rem" }} />
+                                    </ConfirmDelete>
+                                </Stack>
                             </ListItemButton>
                             <Divider />
                         </React.Fragment>
