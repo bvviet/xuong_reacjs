@@ -1,7 +1,7 @@
 export type FormData = {
   name: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   city: string;
   stage: string;
   address: string;

@@ -6,6 +6,7 @@ import { ValidationErrors } from "final-form";
 import { FormData } from "../../types/formdata";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { UserContext } from "../../contexts/userContext";
 
 const BackgroundImage = styled("img")({
     position: "absolute",
@@ -32,15 +33,15 @@ const FormContainer = styled("div")({
 
 const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState<"COD" | "Transfer">("COD");
-
+    const { user } = React.useContext(UserContext);
     const handlePaymentMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPaymentMethod(event.target.checked ? "Transfer" : "COD");
     };
 
     const [formData, setFormData] = useState<FormData>({
-        name: "",
-        email: "",
-        phone: "",
+        name: user?.username || "",
+        email: user?.email || "",
+        phoneNumber: "",
         city: "",
         stage: "",
         address: "",
@@ -54,21 +55,53 @@ const Checkout = () => {
         });
     };
 
+    const handleSubmit = async (values: typeof formData) => {
+        const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLScvMW0B9V9c2GY6Moz4imsSqUWSdh297uyb0mBXjHWQc4ezmQ/formResponse";
+
+        const formData = new URLSearchParams();
+        formData.append("entry.1660480519", values.name);
+        formData.append("entry.304118864", values.email);
+        formData.append("entry.788266766", values.phoneNumber);
+        formData.append("entry.993729620", values.city);
+        formData.append("entry.1470844363", values.stage);
+        formData.append("entry.759237955", values.address);
+
+        try {
+            const response = await fetch(googleFormUrl, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+
+                console.log("Form submitted successfully");
+                // setTimeout(() => {
+                //     window.location.reload();
+                // }, 3000); // Delay 3 seconds before reloading
+            } else {
+                throw new Error("Network response was not ok");
+            }
+        } catch (error) {
+            toast.success("Thanh toán thành công");
+            console.error("Error submitting form", error);
+        }
+    };
+
     const validate = (values: FormData): ValidationErrors => {
-        const { name, email, phone, city, stage, address } = values;
+        const { name, email, phoneNumber, city, stage, address } = values;
         const errors: ValidationErrors = {};
 
         if (!name) errors.name = "Vui lòng điền tên";
         if (!email) errors.email = "Vui lòng điền email";
 
-        if (!phone) {
-            errors.phone = "Vui lòng điền số điện thoại";
-        } else if (!/^[0-9]+$/.test(phone)) {
-            errors.phone = "Số điện thoại không đúng định dạng";
-        } else if (!phone.startsWith("0")) {
-            errors.phone = "Số điện thoại phải bắt đầu bằng số 0";
-        } else if (phone.length !== 10) {
-            errors.phone = "Số điện thoại phải có độ dài 10 số";
+        if (!phoneNumber) {
+            errors.phoneNumber = "Vui lòng điền số điện thoại";
+        } else if (!/^[0-9]+$/.test(phoneNumber)) {
+            errors.phoneNumber = "Số điện thoại không đúng định dạng";
+        } else if (!phoneNumber.startsWith("0")) {
+            errors.phoneNumber = "Số điện thoại phải bắt đầu bằng số 0";
+        } else if (phoneNumber.length !== 10) {
+            errors.phoneNumber = "Số điện thoại phải có độ dài 10 số";
         }
         if (!city) errors.city = "Vui lòng nhập thành phố";
         if (!stage) errors.stage = "Vui lòng nhập quận, huyện, xã";
@@ -76,10 +109,7 @@ const Checkout = () => {
         return errors;
     };
 
-    const handleSubmit = async (values: FormData) => {
 
-
-    };
 
     return (
         <Section>
@@ -130,7 +160,8 @@ const Checkout = () => {
                                                             required
                                                             fullWidth
                                                             id="name"
-                                                            label="Name"
+                                                            label="Tên"
+
                                                             error={meta.touched && meta.error}
                                                             helperText={meta.touched && meta.error}
                                                             sx={{ fontSize: "15px!" }}
@@ -142,15 +173,16 @@ const Checkout = () => {
                                                     )}
                                                 </Field>
                                             </Grid>
+
                                             <Grid item xs={12}>
-                                                <Field name="phone">
+                                                <Field name="email">
                                                     {({ input, meta }) => (
                                                         <TextField
                                                             {...input}
                                                             required
                                                             fullWidth
-                                                            id="phone"
-                                                            label="phone"
+                                                            id="email"
+                                                            label=" Email"
                                                             error={meta.touched && meta.error}
                                                             helperText={meta.touched && meta.error}
                                                             onChange={(e) => {
@@ -162,14 +194,14 @@ const Checkout = () => {
                                                 </Field>
                                             </Grid>
                                             <Grid item xs={12}>
-                                                <Field name="email">
+                                                <Field name="phoneNumber">
                                                     {({ input, meta }) => (
                                                         <TextField
                                                             {...input}
                                                             required
                                                             fullWidth
-                                                            id="email"
-                                                            label=" email"
+                                                            id="phoneNumber"
+                                                            label="Số điện thoại"
                                                             error={meta.touched && meta.error}
                                                             helperText={meta.touched && meta.error}
                                                             onChange={(e) => {
@@ -188,7 +220,7 @@ const Checkout = () => {
                                                             required
                                                             fullWidth
                                                             id="city"
-                                                            label="city"
+                                                            label="Thành phố"
                                                             error={meta.touched && meta.error}
                                                             helperText={meta.touched && meta.error}
                                                             onChange={(e) => {
@@ -207,7 +239,7 @@ const Checkout = () => {
                                                             required
                                                             fullWidth
                                                             id="stage"
-                                                            label="stage"
+                                                            label="Quận/Huyện/Xã"
                                                             error={meta.touched && meta.error}
                                                             helperText={meta.touched && meta.error}
                                                             onChange={(e) => {
@@ -225,7 +257,7 @@ const Checkout = () => {
                                                             {...input}
                                                             fullWidth
                                                             id="address"
-                                                            label="address"
+                                                            label="Địa chỉ"
                                                             error={meta.touched && meta.error}
                                                             helperText={meta.touched && meta.error}
                                                             onChange={(e) => {
@@ -268,6 +300,7 @@ const Checkout = () => {
                                             variant="contained"
                                             color="primary"
                                             fullWidth
+                                            type="submit"
                                             disabled={submitting}
                                             sx={{
                                                 width: { xs: "300px", sm: "300px", lg: "100%" },
