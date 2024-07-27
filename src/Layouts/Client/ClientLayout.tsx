@@ -11,6 +11,7 @@ import Footer from "./Footer/Footer";
 import About from "../../components/client/About/About";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/admin/theme/theme";
+import PopupModal from "../../components/client/PopupModal";
 
 const ClientLayout = () => {
     const context = useContext(LoadingContext);
@@ -23,13 +24,14 @@ const ClientLayout = () => {
 
     return (
         <div>
+            <PopupModal />
             <Loading isShow={isLoading} />
             <CartProvider>
                 <Header />
                 <Container maxWidth="xl" sx={{ marginTop: "75px" }}>
                     <ToastContainer />
                     <ThemeProvider theme={theme}>
-                    <Outlet />
+                        <Outlet />
                     </ThemeProvider>
                 </Container>
                 <About />
@@ -37,6 +39,5 @@ const ClientLayout = () => {
             </CartProvider>
         </div>
     );
-
 };
 export default ClientLayout;

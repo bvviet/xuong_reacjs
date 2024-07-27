@@ -10,7 +10,7 @@ const SlideShow = () => {
                     <div
                         style={{
                             backgroundImage:
-                                "url(https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
+                                "url(https://static-images.vnncdn.net/files/publish/2022/10/17/name-168-1336.jpg)",
                         }}
                     >
                         <span>Slide 1</span>
@@ -20,7 +20,7 @@ const SlideShow = () => {
                     <div
                         style={{
                             backgroundImage:
-                                "url(https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80)",
+                                "url(https://nld.mediacdn.vn/zoom/700_438/291774122806476800/2024/3/30/phong-khai-mac-01-1711786136154572491621.png)",
                         }}
                     >
                         <span>Slide 2</span>
@@ -30,7 +30,7 @@ const SlideShow = () => {
                     <div
                         style={{
                             backgroundImage:
-                                "url(https://images.unsplash.com/photo-1444525873963-75d329ef9e1b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80)",
+                                "url(https://media.cooky.vn/images/blog-2016/tra-da-via-he-ha-noi%202.jpg)",
                         }}
                     >
                         <span>Slide 3</span>

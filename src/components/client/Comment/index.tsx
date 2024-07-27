@@ -1,5 +1,4 @@
-import { Avatar, Box, Button, Grid, IconButton, Rating, Tooltip, Typography } from "@mui/material";
-import CreateIcon from "@mui/icons-material/Create";
+import { Avatar, Box, Button, Grid, Rating, Typography } from "@mui/material";
 import AddComment from "./AddComment";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -7,6 +6,7 @@ import { useParams } from "react-router-dom";
 import commentType from "../../../types/comment";
 import { UserContext } from "../../../contexts/userContext";
 import DeleteComment from "./DeleteComment";
+import UpdateComment from "./UpdateComment";
 
 const Comment = () => {
     const { id } = useParams();
@@ -65,11 +65,7 @@ const Comment = () => {
                             {user?._id !== undefined && item.userId._id === user._id.toString() && (
                                 <>
                                     <DeleteComment commentId={item._id} fetchComment={fetchComment} />
-                                    <Tooltip title="Chỉnh sửa" sx={{ position: "absolute", top: 5, right: 40 }}>
-                                        <IconButton>
-                                            <CreateIcon sx={{ fontSize: "2rem" }} />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <UpdateComment handleClickOpen={handleClickOpen} />
                                 </>
                             )}
 
