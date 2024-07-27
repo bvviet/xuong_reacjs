@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useContext } from "react";
 import {
   Box,
   Grid,
@@ -11,20 +12,21 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
 } from "@mui/material";
 import styled from "styled-components";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import React, { useEffect, useState, useContext } from "react";
 import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 import { CartItem } from "../../types/products";
 import { LoadingContext } from "../../contexts/LoadingContext";
 import { UserContext } from "../../contexts/userContext";
+import { useTotalPrice } from "../../contexts/TotalPriceContext"; // Use custom hook
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
+// Styled component
 const Wrapper = styled(Stack)({
   width: 900,
 });
@@ -32,9 +34,9 @@ const Wrapper = styled(Stack)({
 export default function Cart() {
   const shippingFee = 10000;
   const [carts, setCarts] = useState<CartItem[]>([]);
-  const [totalPrice, setTotalPrice] = useState(0);
   const loadingContext = useContext(LoadingContext);
   const { user } = useContext(UserContext);
+  const { totalPrice, setTotalPrice } = useTotalPrice(); // Use the custom hook
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 
@@ -241,14 +243,16 @@ export default function Cart() {
                       <FormatPrice price={item.product.price * item.quantity} />
                     </Grid>
                   </Grid>
-                  <Divider sx={{ margin: "12px 24px", backgroundColor: "gray" }} />
+                  <Divider
+                    sx={{ margin: "12px 24px", backgroundColor: "gray" }}
+                  />
                 </Box>
               ))}
             </>
           )}
         </Wrapper>
 
-        <Box className="max-sm:hidden sm:w-[300px] lg:w-full">
+        <Box className="max-sm:hidden sm:w-[300px] lg:w-[400px]">
           <Box
             sx={{
               backgroundColor: "#FFF9E5",
@@ -257,29 +261,30 @@ export default function Cart() {
               padding: "24px",
             }}
           >
+            <Typography fontSize={24} fontWeight={600} mb={2}>
+              Thanh toán
+            </Typography>
             <Box ml={2}>
-              <Typography
-                variant="h4"
-                component="p"
-                mx={2}
-                mb={4}
-                fontWeight={550}
-              >
-                Thanh toán
-              </Typography>
+
               <Stack spacing={2} mx={2}>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography fontSize={14} fontWeight={550}>
+                    Tạm tính:
+                  </Typography>
+                  <FormatPrice price={carts.reduce((total, item) => total + item.product.price * item.quantity, 0)} />
+                </Box>
                 <Box display="flex" justifyContent="space-between">
                   <Typography fontSize={14} fontWeight={550}>
                     Phí vận chuyển:
                   </Typography>
-                  <FormatPrice price={10000} />
+                  <FormatPrice price={shippingFee} />
                 </Box>
 
                 <Box display="flex" justifyContent="space-between" pb={4}>
-                  <Typography className="name_cart" fontWeight={550} fontSize={14}>
+                  <Typography className="name_cart" fontWeight={550} fontSize={14} sx={{ color: "red" }}>
                     Tổng tiền phải trả:
                   </Typography>
-                  <FormatPrice price={totalPrice} />
+                  <FormatPrice price={totalPrice} sx={{ color: "red", fontWeight: 700 }} />
                 </Box>
               </Stack>
             </Box>
@@ -301,28 +306,28 @@ export default function Cart() {
                 </Typography>
               </Link>
             </Button>
+
           </Box>
         </Box>
       </Box>
+
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title" sx={{ fontSize: "2rem" }}>
-          {"DoubleV hỏi bạn."}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">Xác nhận</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" sx={{ fontSize: "1.4rem" }}>
-            Bạn chắn chắn muốn xoá sản phẩm này khỏi giỏ hàng chứ?
+          <DialogContentText id="alert-dialog-description">
+            Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="error" sx={{ fontSize: "1.2rem" }}>
-            Huỷ
+          <Button onClick={handleCloseDialog} color="primary">
+            Hủy bỏ
           </Button>
-          <Button onClick={handleConfirmDelete} color="success" sx={{ fontSize: "1.2rem" }} autoFocus>
+          <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
             Xác nhận
           </Button>
         </DialogActions>

@@ -14,6 +14,7 @@ import AddGenre from "./pages/AdminGenre/addGenre";
 import EditGenre from "./pages/AdminGenre/editGenre";
 import Cart from "./pages/Client/Cart";
 import Checkout from "./pages/Client/Checkout";
+import ThankUPage from "./pages/Client/Tkspage";
 
 export const routers = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const routers = createBrowserRouter([
       {
         path: "/checkout",
         element: <Checkout />
+      },
+      {
+        path: "/thanku",
+        element: <ThankUPage />
       }
     ],
   },
