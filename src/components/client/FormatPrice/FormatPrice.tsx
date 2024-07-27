@@ -1,20 +1,21 @@
 import { NumericFormat } from "react-number-format";
+import { Box, SxProps, Theme } from "@mui/material";
 
 interface FormatPriceProps {
     price: number | undefined;
+    sx?: SxProps<Theme>; // Add sx prop here
 }
 
-const FormatPrice = ({ price }: FormatPriceProps) => {
+const FormatPrice = ({ price, sx }: FormatPriceProps) => {
     return (
-        <div>
+        <Box sx={sx}>
             <NumericFormat
                 value={price}
                 displayType={"text"}
                 thousandSeparator={true}
                 suffix={" VNĐ"}
-                style={{ color: "#53382c", fontWeight: "700" }}
             />
-        </div>
+        </Box>
     );
 };
 
