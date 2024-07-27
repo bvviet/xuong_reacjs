@@ -25,7 +25,18 @@ const HomeClient = () => {
             >
                 {products.map((product) => (
                     <Grid item xs={12} sm={6} md={3} lg={2.4} key={product._id}>
-                        <Card sx={{ maxWidth: 345, display: "flex", flexDirection: "column" }}>
+                        <Card
+                            sx={{
+                                maxWidth: 345,
+                                display: "flex",
+                                flexDirection: "column",
+                                transition: "transform 0.3s ease-in-out",
+                                "&:hover": {
+                                    transform: "translateY(-5px)",
+                                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                                },
+                            }}
+                        >
                             <Link to={`/detail/${product._id}`}>
                                 <img
                                     style={{ height: 140, width: "100%", objectFit: "cover" }}
