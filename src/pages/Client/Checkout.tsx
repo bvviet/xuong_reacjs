@@ -122,6 +122,11 @@ const Checkout = () => {
                 cartItems,
             });
 
+            await axios.post("http://localhost:3000/cart", {
+                userId: user?._id,
+                cartItems,
+            });
+
             clearCart();
             sessionStorage.setItem("orderSuccess", "true");
             navigate("/thanku");
@@ -132,6 +137,7 @@ const Checkout = () => {
             setIsLoading(false);
         }
     };
+
 
     return (
         <Section>

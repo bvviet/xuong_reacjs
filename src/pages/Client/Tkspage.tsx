@@ -12,7 +12,10 @@ export default function ThankUPage() {
       toast.success("Bạn đã đặt hàng thành công!");
 
       sessionStorage.removeItem("orderSuccess");
-    }
+     }
+     // else (orderSuccess) {
+    //   toast.error("Đã có lỗi sảy ra vui lòng thử lại")
+    // }
   }, []);
 
   return (

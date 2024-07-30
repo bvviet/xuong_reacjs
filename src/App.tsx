@@ -16,6 +16,9 @@ import Cart from "./pages/Client/Cart";
 import Checkout from "./pages/Client/Checkout";
 import ThankUPage from "./pages/Client/Tkspage";
 
+import AdminOrderList from "./pages/Admin_checkout/list";
+import OrderList from "./pages/Admin_checkout/listOrder";
+
 export const routers = createBrowserRouter([
   {
     path: "/",
@@ -50,6 +53,7 @@ export const routers = createBrowserRouter([
         path: "",
         element: <AdminLayout />,
         children: [
+          //admin product
           {
             path: "list",
             element: <AdminProductList />,
@@ -62,6 +66,7 @@ export const routers = createBrowserRouter([
             path: "edit/:productId",
             element: <AdminProductEdit />,
           },
+          //admin category
           {
             path: "listGenre",
             element: <GenreList />,
@@ -73,6 +78,15 @@ export const routers = createBrowserRouter([
           {
             path: "editGenre/:categoryId",
             element: <EditGenre />,
+          },
+          //admin order
+          {
+            path: "listOrder",
+            element: <AdminOrderList />,
+          },
+          {
+            path: "listOrderItems",
+            element: <OrderList />,
           },
         ],
       },
