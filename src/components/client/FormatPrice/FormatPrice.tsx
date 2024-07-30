@@ -13,7 +13,7 @@ const FormatPrice = ({ price, sx }: FormatPriceProps) => {
                 value={price}
                 displayType={"text"}
                 thousandSeparator={true}
-                suffix={" VNĐ"}
+                suffix={" ₫"}
             />
         </Box>
     );

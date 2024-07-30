@@ -15,7 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
+import WalletIcon from '@mui/icons-material/Wallet';
 import Search from "../../../components/client/Search/Search";
 import Register from "../../../pages/Client/Register";
 import Login from "../../../pages/Client/Login";
@@ -109,16 +109,28 @@ function Header() {
                         <>
                             <FavoriteDialog />
 
+
+                            <Link to="/purchase" style={{ textDecoration: 'none' }}>
+                                <IconButton color="inherit" sx={{ marginRight: 2, fontSize: '3rem' }}>
+                                    <WalletIcon sx={{ fontSize: 'inherit' }} />
+                                </IconButton>
+                            </Link>
+
+
+
                             <IconButton
                                 component={Link}
                                 to="/cart"
                                 color="inherit"
                                 sx={{ marginRight: 2, fontSize: "3rem" }}
                             >
-                                {/* Card */}
-                                <Badge color="primary" badgeContent={cart} max={99}>
-                                    <ShoppingCartIcon sx={{ fontSize: "inherit" }} />
-                                </Badge>
+                                {cart > 0 ? (
+                                    <Badge color="primary" badgeContent={cart} max={99}>
+                                        <ShoppingCartIcon sx={{ fontSize: 'inherit' }} />
+                                    </Badge>
+                                ) : (
+                                    <ShoppingCartIcon sx={{ fontSize: 'inherit' }} />
+                                )}
                             </IconButton>
 
                             <Box sx={{ flexGrow: 0 }}>
@@ -219,7 +231,7 @@ function Header() {
                     )}
                 </Toolbar>
             </Container>
-        </StyledAppBar>
+        </StyledAppBar >
     );
 }
 

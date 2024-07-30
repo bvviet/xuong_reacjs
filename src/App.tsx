@@ -15,9 +15,10 @@ import EditGenre from "./pages/AdminGenre/editGenre";
 import Cart from "./pages/Client/Cart";
 import Checkout from "./pages/Client/Checkout";
 import ThankUPage from "./pages/Client/Tkspage";
-
 import AdminOrderList from "./pages/Admin_checkout/list";
 import OrderList from "./pages/Admin_checkout/listOrder";
+import Purchasee from "./pages/Client/Purchase";
+
 
 export const routers = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const routers = createBrowserRouter([
       {
         path: "/thanku",
         element: <ThankUPage />
+      },
+      {
+        path: "/purchase",
+        element: <Purchasee/>
       }
     ],
   },
