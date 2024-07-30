@@ -39,10 +39,12 @@ const About = () => {
                 </div>
             </div>
 
-            <img src={cr7} alt="" />
-            <img src={thiagoSilval} width={"370px"} alt="" />
-            <img src={cr74} alt="" />
-            <img src={thiago2} width={"370px"} style={{ marginLeft: "45px" }} alt="" />
+            <div style={{ display: "flex" }}>
+                <img src={cr7} alt="" />
+                <img src={thiagoSilval} width={"370px"} alt="" />
+                <img src={cr74} alt="" />
+                <img src={thiago2} width={"370px"} style={{ marginLeft: "45px" }} alt="" />
+            </div>
 
             <div className="about__main">
                 <div className="about__left">
