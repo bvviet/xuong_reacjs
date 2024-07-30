@@ -12,6 +12,7 @@ import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { FavoriteProvider } from "./contexts/favoriteContext.tsx";
 import { TotalPriceProvider } from "./contexts/TotalPriceContext.tsx";
+import { PurchaseProvider } from "./contexts/purchaseContext.tsx";
 
 axios.defaults.baseURL = "http://localhost:3000";
 configureAxios();
@@ -26,11 +27,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <ProductsProvider>
                 <LoadingProvider>
                     <FavoriteProvider>
-                        <ThemeProvider theme={theme}>
-                            <TotalPriceProvider>
-                                <RouterProvider router={routers} />
-                            </TotalPriceProvider>
-                        </ThemeProvider>
+                        <PurchaseProvider>
+                            <ThemeProvider theme={theme}>
+                                <TotalPriceProvider>
+                                    <RouterProvider router={routers} />
+                                </TotalPriceProvider>
+                            </ThemeProvider>
+                        </PurchaseProvider>
                     </FavoriteProvider>
                 </LoadingProvider>
             </ProductsProvider>

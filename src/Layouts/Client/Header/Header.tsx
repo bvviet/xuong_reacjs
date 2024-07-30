@@ -15,7 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import WalletIcon from '@mui/icons-material/Wallet';
+import WalletIcon from "@mui/icons-material/Wallet";
 import Search from "../../../components/client/Search/Search";
 import Register from "../../../pages/Client/Register";
 import Login from "../../../pages/Client/Login";
@@ -23,6 +23,7 @@ import Category from "../../../components/client/Category/Category";
 import { UserContext } from "../../../contexts/userContext";
 import { useCart } from "../../../contexts/CartContext";
 import FavoriteDialog from "../../../pages/Client/Favorite/Favorites";
+import { PurchaseContext } from "../../../contexts/purchaseContext";
 
 const StyledAppBar = styled(AppBar)({
     color: "#000",
@@ -41,6 +42,15 @@ function Header() {
     const handleCloseRegister = () => setOpenRegister(false);
     const handleOpenLogin = () => setOpenLogin(true);
     const handleCloseLogin = () => setOpenLogin(false);
+
+    const context = React.useContext(PurchaseContext);
+
+    // Kiểm tra nếu context chưa được cung cấp
+    if (!context) {
+        throw new Error("CartComponent must be used within a PurchaseProvider");
+    }
+
+    const { purchaseLength } = context;
 
     const token = localStorage.getItem("token");
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -109,14 +119,13 @@ function Header() {
                         <>
                             <FavoriteDialog />
 
-
-                            <Link to="/purchase" style={{ textDecoration: 'none' }}>
-                                <IconButton color="inherit" sx={{ marginRight: 2, fontSize: '3rem' }}>
-                                    <WalletIcon sx={{ fontSize: 'inherit' }} />
+                            <Link to="/purchase" style={{ textDecoration: "none" }}>
+                                <IconButton color="inherit" sx={{ marginRight: 2, fontSize: "3rem" }}>
+                                    <Badge color="primary" badgeContent={purchaseLength} max={99}>
+                                        <WalletIcon sx={{ fontSize: "inherit" }} />
+                                    </Badge>
                                 </IconButton>
                             </Link>
-
-
 
                             <IconButton
                                 component={Link}
@@ -126,10 +135,10 @@ function Header() {
                             >
                                 {cart > 0 ? (
                                     <Badge color="primary" badgeContent={cart} max={99}>
-                                        <ShoppingCartIcon sx={{ fontSize: 'inherit' }} />
+                                        <ShoppingCartIcon sx={{ fontSize: "inherit" }} />
                                     </Badge>
                                 ) : (
-                                    <ShoppingCartIcon sx={{ fontSize: 'inherit' }} />
+                                    <ShoppingCartIcon sx={{ fontSize: "inherit" }} />
                                 )}
                             </IconButton>
 
@@ -231,7 +240,7 @@ function Header() {
                     )}
                 </Toolbar>
             </Container>
-        </StyledAppBar >
+        </StyledAppBar>
     );
 }
 

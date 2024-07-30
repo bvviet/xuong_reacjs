@@ -22,6 +22,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { FormData } from "../../types/formdata";
 import { UserContext } from "../../contexts/userContext";
+import { PurchaseContext } from "../../contexts/purchaseContext";
 
 const BackgroundImage = styled("img")({
     position: "absolute",
@@ -53,13 +54,20 @@ const Checkout = () => {
     const { totalPrice } = useTotalPrice();
     const navigate = useNavigate();
 
+    const contextPurchase = useContext(PurchaseContext);
+
+    // Kiểm tra nếu context chưa được cung cấp
+    if (!contextPurchase) {
+        throw new Error("CartComponent must be used within a PurchaseProvider");
+    }
+
+    const { getAllOrders } = contextPurchase;
+
     const handleBack = () => {
         navigate(-1);
     };
 
-    const handlePaymentMethodChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handlePaymentMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPaymentMethod(event.target.checked ? "Transfer" : "COD");
     };
 
@@ -72,9 +80,7 @@ const Checkout = () => {
         address: "",
     });
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -126,7 +132,7 @@ const Checkout = () => {
                 userId: user?._id,
                 cartItems,
             });
-
+            getAllOrders();
             clearCart();
             sessionStorage.setItem("orderSuccess", "true");
             navigate("/thanku");
@@ -137,7 +143,6 @@ const Checkout = () => {
             setIsLoading(false);
         }
     };
-
 
     return (
         <Section>
@@ -373,13 +378,7 @@ const Checkout = () => {
                                                 backgroundColor: "#FF5B26",
                                             }}
                                         >
-                                            <Typography
-                                                variant="h5"
-                                                component="p"
-                                                color="white"
-                                                py={1}
-                                                px={4}
-                                            >
+                                            <Typography variant="h5" component="p" color="white" py={1} px={4}>
                                                 Thanh toán
                                             </Typography>
                                         </Button>
