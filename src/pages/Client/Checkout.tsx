@@ -13,15 +13,15 @@ import {
 import { styled } from "@mui/material/styles";
 import { Form, Field } from "react-final-form";
 import { ValidationErrors } from "final-form";
-import { FormData } from "../../types/formdata";
 import axios from "axios";
 import { LoadingContext } from "../../contexts/LoadingContext";
-import { UserContext } from "../../contexts/userContext";
+
 import { useTotalPrice } from "../../contexts/TotalPriceContext";
 import FormatPrice from "../../components/client/FormatPrice/FormatPrice";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
-
+import { FormData } from "../../types/formdata";
+import { UserContext } from "../../contexts/userContext";
 
 const BackgroundImage = styled("img")({
     position: "absolute",
@@ -51,12 +51,12 @@ const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState<"COD" | "Transfer">("COD");
     const { user } = useContext(UserContext);
     const { totalPrice } = useTotalPrice();
-
     const navigate = useNavigate();
 
-    const handlBack = () => {
-        navigate(-1)
-    }
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     const handlePaymentMethodChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -111,19 +111,23 @@ const Checkout = () => {
     const { setIsLoading } = context;
 
     const handleSubmit = async (values: FormData) => {
+        const cartKey = `cart_${user?._id}`;
+        const cartItems = JSON.parse(localStorage.getItem(cartKey) || "[]");
+
+        setIsLoading(true);
         try {
-            setIsLoading(true);
-            await axios.post("/checkout", values);
+            await axios.post("http://localhost:3000/checkout", {
+                userId: user?._id,
+                ...values,
+                cartItems,
+            });
 
             clearCart();
-
-            // Lưu trạng thái thành công vào sessionStorage
             sessionStorage.setItem("orderSuccess", "true");
-
-            // Điều hướng đến trang "Thank you"
             navigate("/thanku");
         } catch (error) {
-            console.error(error);
+            console.error("Error during checkout:", error);
+            alert("Checkout failed. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -332,17 +336,23 @@ const Checkout = () => {
                                             </Typography>
                                             <FormatPrice price={totalPrice} sx={{ color: "red", fontWeight: 700 }} />
                                         </Box>
-                                        <Box sx={{
-                                            marginTop: "12px",
-                                            color: "gray",
-                                            "&:hover": {
-                                                color: "red",
-                                                cursor: "pointer",
-                                            },
-                                        }}>
-                                            <Link to={""} onClick={handlBack} style={{ display: "flex", alignItems: "center", gap: 8, }} >
+                                        <Box
+                                            sx={{
+                                                marginTop: "12px",
+                                                color: "gray",
+                                                "&:hover": {
+                                                    color: "red",
+                                                    cursor: "pointer",
+                                                },
+                                            }}
+                                        >
+                                            <Link
+                                                to={""}
+                                                onClick={handleBack}
+                                                style={{ display: "flex", alignItems: "center", gap: 8 }}
+                                            >
                                                 <i className="fas fa-arrow-left"></i>
-                                                <Typography> Quay lại giỏ hàng </Typography>
+                                                <Typography>Quay lại giỏ hàng</Typography>
                                             </Link>
                                         </Box>
                                         <Button
