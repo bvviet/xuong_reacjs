@@ -1,3 +1,5 @@
+import userType from "./user";
+
 export type IProduct = {
   _id: string;
   name: string;
@@ -43,3 +45,14 @@ export type CartItem = {
   product: ProductCart;
   quantity: number;
 };
+export type CheckOut = {
+  _id: string;
+  userId: userType;
+  name: string;
+  phone: number;
+  email: string;
+  city: string;
+  stage: string;
+  address: string;
+  cartItems: CartItem[]
+}
